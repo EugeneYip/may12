@@ -1563,4 +1563,448 @@ h1 { font-size: clamp(2rem, 4.5vw, 3.72rem); line-height: 1.02; max-width: 960px
   .modeDock { display: none !important; }
 }
 
+
+/* v4 hard visual reset: fix missing contrast, card overflow, narrow grids, and collapsed language control */
+.class2Root {
+  --paper: #FCFAF2;
+  --ink: #202528;
+  --muted: #4F585C;
+  --line: rgba(32, 37, 40, 0.16);
+  --card: #FCFAF2;
+  --cardSolid: #FCFAF2;
+  --ruri: #005CAF;
+  --ai: #165E83;
+  --enji: #9F353A;
+  --koke: #7B8D42;
+  --kokiake: #86473F;
+  --plum: #622954;
+  background: #FCFAF2 !important;
+  color: #202528 !important;
+  font-size: 15.5px !important;
+  line-height: 1.56 !important;
+  padding-bottom: 96px !important;
+}
+
+.class2Root * {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: none !important;
+}
+
+.class2Root p,
+.class2Root li,
+.class2Root button,
+.class2Root div,
+.class2Root span {
+  line-height: 1.48 !important;
+}
+
+.class2Root p { font-size: 0.95rem !important; max-width: 76ch; }
+.class2Root li { font-size: 0.94rem !important; }
+.class2Root h1,
+.class2Root h2,
+.class2Root h3,
+.class2Root h4 {
+  color: #202528 !important;
+  overflow: visible !important;
+}
+
+.hero,
+.sectionBlock,
+.sidebar,
+.card,
+.articleCard,
+.timelineItem,
+.assignmentCard,
+.scheduleCard,
+.visualModel,
+.flowBoard,
+.dfmBoard,
+.closePanel,
+.decisionCard,
+.riskItem,
+.toolCard,
+.frameworkCard,
+.participationGrid article,
+.cascadeCard,
+.swotBox,
+.dfmSteps article,
+.platformGrid div,
+.sourceItem,
+.focusList div,
+.chain div,
+.formulaBoard div,
+.miniRow > div,
+.processBox,
+.npdFlow article,
+.compareTable div,
+.checklistPanel button {
+  background: #FCFAF2 !important;
+  color: #202528 !important;
+  border-color: rgba(32, 37, 40, 0.16) !important;
+  overflow: visible !important;
+  max-width: 100% !important;
+}
+
+.hero { padding: 22px !important; }
+.sectionBlock { padding: 18px !important; }
+.card,
+.articleCard,
+.timelineItem,
+.assignmentCard,
+.scheduleCard,
+.visualModel,
+.flowBoard,
+.dfmBoard,
+.closePanel,
+.decisionCard,
+.riskItem,
+.toolCard,
+.frameworkCard,
+.participationGrid article,
+.cascadeCard,
+.swotBox,
+.dfmSteps article,
+.platformGrid div,
+.sourceItem,
+.chain div,
+.formulaBoard div,
+.processBox,
+.npdFlow article {
+  padding: 13px !important;
+  border-radius: 16px !important;
+}
+
+/* Remove the failure mode where white text remains after its colored background fails to load. */
+.sectionIcon,
+.articleIndex,
+.chain span,
+.formulaBoard span,
+.decisionCard > span,
+.cascadeNum,
+.npdFlow span,
+.dfmSteps span,
+.focusList span,
+.checklistPanel button span,
+.checklistPanel button.checked span,
+.coreCenter {
+  background: #F1EDE2 !important;
+  color: #165E83 !important;
+  border: 1px solid rgba(22, 94, 131, 0.24) !important;
+}
+.sectionIcon .icon { color: #165E83 !important; fill: currentColor !important; }
+.coreCenter .biZh { color: #165E83 !important; }
+.modeToggle,
+.modeMenu,
+.modeMenu button,
+.modeMenu button.active,
+.modeMenu button:hover {
+  background: #FCFAF2 !important;
+  color: #202528 !important;
+  border-color: rgba(32, 37, 40, 0.18) !important;
+}
+.modeToggle strong { color: #165E83 !important; }
+.modeMenu button.active { background: #F1EDE2 !important; color: #165E83 !important; }
+
+.muted,
+.biZh,
+.miniNote,
+.riskItem p,
+.toolCard p,
+.frameworkCard p,
+.participationGrid p,
+.cautionBox p,
+.corePoint p,
+.sideSummary ol,
+.processBox small,
+.heroSub,
+.badge.ghost {
+  color: #4F585C !important;
+}
+
+.badge,
+.metricPill,
+.sourceTag {
+  background: #F7F2E8 !important;
+  color: #165E83 !important;
+  border-color: rgba(22, 94, 131, 0.18) !important;
+  white-space: normal !important;
+}
+
+h1 {
+  font-size: clamp(1.95rem, 4.2vw, 3.42rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.026em !important;
+  max-width: 980px !important;
+}
+.heroTitle .biZh {
+  font-size: clamp(1.08rem, 2.55vw, 1.72rem) !important;
+  line-height: 1.26 !important;
+  max-width: 900px !important;
+}
+.sectionHead {
+  grid-template-columns: 36px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+.sectionIcon { width: 36px !important; height: 36px !important; border-radius: 12px !important; }
+.sectionHead h2 {
+  font-size: clamp(1.18rem, 2vw, 1.62rem) !important;
+  line-height: 1.22 !important;
+  letter-spacing: -0.014em !important;
+}
+.card h3,
+.articleCard h3,
+.decisionCard h3,
+.timelineItem h3,
+.assignmentCard h3,
+.scheduleCard h3,
+.visualModel h3,
+.flowBoard h3,
+.dfmBoard h3,
+.closePanel h3,
+.toolCard h3,
+.frameworkCard h3,
+.participationGrid h3 {
+  font-size: 1rem !important;
+  line-height: 1.28 !important;
+}
+.card h4,
+.articleCard h4,
+.dfmSteps h4,
+.swotBox h4 {
+  font-size: 0.95rem !important;
+  line-height: 1.34 !important;
+}
+
+/* Force the known problem areas into readable rows instead of narrow cards. */
+#design .npdFlow,
+#design .toolGrid,
+#design .dfmSteps,
+#assignments .frameworkGrid,
+#assignments .assignmentGrid,
+#assignments .focusList,
+#participation .formulaBoard,
+#participation .participationGrid,
+#participation .twoCol,
+#checklist .checklistPanel {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+
+#design .npdFlow article,
+#design .toolGrid .toolCard,
+#design .dfmSteps article,
+#assignments .frameworkCard,
+#assignments .assignmentCard,
+#assignments .focusList div,
+#participation .formulaBoard div,
+#participation .participationGrid article,
+#participation .twoCol .card,
+#checklist .checklistPanel button {
+  width: 100% !important;
+  min-height: unset !important;
+}
+
+#design .dfmSteps article,
+#assignments .focusList div,
+#participation .formulaBoard div,
+#checklist .checklistPanel button {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  gap: 10px !important;
+  align-items: start !important;
+}
+
+#design .dfmSteps article h4,
+#design .dfmSteps article p,
+#assignments .focusList div .biEn,
+#assignments .focusList div .biZh,
+#participation .formulaBoard div .biEn,
+#participation .formulaBoard div .biZh,
+#checklist .checklistPanel button .biEn,
+#checklist .checklistPanel button .biZh {
+  max-width: 100% !important;
+}
+
+#design .dfmSteps article p,
+#participation .participationGrid article p,
+#assignments .assignmentCard li,
+#assignments .focusList div,
+#checklist .checklistPanel button {
+  font-size: 0.93rem !important;
+  line-height: 1.5 !important;
+}
+
+#design .dfmSteps span,
+#assignments .focusList span,
+#participation .formulaBoard span,
+#checklist .checklistPanel button span {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 10px !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 0.75rem !important;
+  line-height: 1 !important;
+}
+
+/* Keep general overview grids useful on desktop, but never narrow enough to crush bilingual text. */
+.articleGrid,
+.twoCol,
+.strategyCascade,
+.riskGrid,
+.swotGrid,
+.platformGrid,
+.timeline,
+.decisionGrid,
+.sourceGrid,
+.chain {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)) !important;
+  gap: 11px !important;
+}
+.decisionGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)) !important; }
+.sourceGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important; }
+
+.flowNodes,
+.processModel {
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+}
+.flowArrow,
+.processArrow { transform: rotate(90deg) !important; font-size: 20px !important; }
+
+.compareTable {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  overflow: visible !important;
+}
+.compareTable div { min-height: unset !important; }
+.scheduleCard { overflow-x: auto !important; }
+.scheduleTable {
+  min-width: 760px !important;
+  font-size: 0.84rem !important;
+}
+.scheduleTable div {
+  padding: 7px 8px !important;
+  overflow: visible !important;
+}
+
+.sidebar {
+  background: #FCFAF2 !important;
+  overflow: auto !important;
+}
+.sidebar button {
+  color: #4F585C !important;
+  font-size: 0.84rem !important;
+}
+.sidebar button.navActive,
+.sidebar button:hover {
+  background: #F1EDE2 !important;
+  color: #165E83 !important;
+}
+
+.modeDock {
+  right: 14px !important;
+  bottom: 14px !important;
+  z-index: 60 !important;
+}
+.modeToggle {
+  min-width: 72px !important;
+  padding: 7px 9px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+.modeToggle span { display: none !important; }
+.modeToggle strong { font-size: 0.72rem !important; line-height: 1 !important; }
+.modeMenu {
+  min-width: 118px !important;
+  border-radius: 14px !important;
+}
+.modeMenu button {
+  font-size: 0.74rem !important;
+  padding: 7px 9px !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 1080px) {
+  .layout { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .sidebar { position: sticky !important; top: 6px !important; padding: 8px !important; }
+  .sidebar nav { display: flex !important; gap: 6px !important; overflow-x: auto !important; padding-bottom: 2px !important; }
+  .sidebar button { min-width: 138px !important; width: auto !important; }
+}
+
+@media (max-width: 760px) {
+  .class2Root { padding: 9px !important; padding-bottom: 88px !important; font-size: 14.6px !important; }
+  .hero, .sectionBlock { padding: 12px !important; border-radius: 18px !important; }
+  h1 { font-size: clamp(1.62rem, 8.2vw, 2.18rem) !important; line-height: 1.1 !important; }
+  .heroSub { font-size: 0.93rem !important; line-height: 1.5 !important; }
+  .heroTitle .biZh { font-size: clamp(1rem, 5vw, 1.26rem) !important; }
+  .sectionHead { grid-template-columns: 32px minmax(0,1fr) !important; }
+  .sectionIcon { width: 32px !important; height: 32px !important; }
+  .sectionHead h2 { font-size: 1.12rem !important; }
+  .card,
+  .articleCard,
+  .timelineItem,
+  .assignmentCard,
+  .scheduleCard,
+  .visualModel,
+  .flowBoard,
+  .dfmBoard,
+  .closePanel,
+  .decisionCard,
+  .riskItem,
+  .toolCard,
+  .frameworkCard,
+  .participationGrid article,
+  .cascadeCard,
+  .swotBox,
+  .dfmSteps article,
+  .platformGrid div,
+  .sourceItem,
+  .chain div,
+  .formulaBoard div,
+  .processBox,
+  .npdFlow article,
+  .checklistPanel button {
+    padding: 10px !important;
+    border-radius: 14px !important;
+  }
+  .articleGrid,
+  .twoCol,
+  .strategyCascade,
+  .riskGrid,
+  .swotGrid,
+  .platformGrid,
+  .timeline,
+  .decisionGrid,
+  .sourceGrid,
+  .chain {
+    grid-template-columns: 1fr !important;
+  }
+  .compareTable { grid-template-columns: 1fr !important; }
+  .modeDock { right: 9px !important; bottom: 9px !important; }
+  .modeToggle { min-width: 60px !important; padding: 7px 8px !important; }
+}
+
+@media (max-width: 430px) {
+  .class2Root { padding: 7px !important; padding-bottom: 86px !important; }
+  .hero, .sectionBlock { padding: 10px !important; }
+  .badge, .metricPill, .sourceTag { font-size: 0.64rem !important; padding: 5px 7px !important; }
+  #design .dfmSteps article,
+  #assignments .focusList div,
+  #participation .formulaBoard div,
+  #checklist .checklistPanel button {
+    grid-template-columns: 30px minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+
 `;
