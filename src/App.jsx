@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 const ICONS = {
   compass: "M12 2l3.5 8.5L24 14l-8.5 3.5L12 26l-3.5-8.5L0 14l8.5-3.5L12 2zm0 5.8l-1.9 4.6L5.5 14l4.6 1.9L12 20.5l1.9-4.6 4.6-1.9-4.6-1.6L12 7.8z",
@@ -385,12 +385,13 @@ function Text({ item, mode, as = "span", className = "" }) {
 }
 
 function Section({ id, icon, label, mode, children, kicker }) {
+  const kickerItem = typeof kicker === "string" ? { en: kicker, zh: kicker } : kicker;
   return (
     <section id={id} className="sectionBlock">
       <div className="sectionHead">
         <div className="sectionIcon"><Icon name={icon} /></div>
         <div>
-          <p className="kicker">{kicker}</p>
+          <p className="kicker"><Text item={kickerItem} mode={mode} /></p>
           <h2><Text item={label} mode={mode} /></h2>
         </div>
       </div>
@@ -421,11 +422,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
   const [mode, setMode] = useState("en");
   const { active, click } = useActiveSection();
   const [checked, setChecked] = useState([]);
-  const L = ui[mode === "zh" ? "zh" : "en"];
 
-  const sectionProgress = useMemo(() => {
-    return Math.round((checked.length / finalChecklist.length) * 100);
-  }, [checked.length]);
 
   const toggleCheck = index => {
     setChecked(prev => prev.includes(index) ? prev.filter(x => x !== index) : [...prev, index]);
@@ -436,31 +433,17 @@ export default function SCHM6201Class2VisualInfrastructure() {
       <style>{styles}</style>
       <header className="hero">
         <div className="heroMeta">
-          <span className="badge"><Icon name="book" />{L.eyebrow}</span>
+          <span className="badge"><Icon name="book" /><Text item={{ en: ui.en.eyebrow, zh: ui.zh.eyebrow }} mode={mode} /></span>
           <span className="badge ghost">Professor Bill Forbes</span>
           <span className="badge ghost">2026/5/12 | 7:30 to 9:30 PM</span>
         </div>
         <div className="heroGrid">
           <div>
-            <h1>{L.title}</h1>
-            <p className="heroSub">{L.subtitle}</p>
+            <h1 className="heroTitle"><Text item={{ en: ui.en.title, zh: ui.zh.title }} mode={mode} /></h1>
+            <p className="heroSub"><Text item={{ en: ui.en.subtitle, zh: ui.zh.subtitle }} mode={mode} /></p>
             <div className="heroCallout">
               <Icon name="warning" />
-              <p>{L.sourceNote}</p>
-            </div>
-          </div>
-          <div className="modePanel" aria-label="Language mode selector">
-            <p>{L.primary}</p>
-            <div className="modeButtons">
-              <button onClick={() => setMode("en")} className={mode === "en" ? "active" : ""}>{L.modeEn}</button>
-              <button onClick={() => setMode("zh")} className={mode === "zh" ? "active" : ""}>{L.modeZh}</button>
-              <button onClick={() => setMode("bi")} className={mode === "bi" ? "active" : ""}>{L.modeBi}</button>
-            </div>
-            <div className="progressRing" role="img" aria-label="Checklist completion">
-              <div className="ring" style={{ background: `conic-gradient(var(--ruri) ${sectionProgress * 3.6}deg, var(--line) 0deg)` }}>
-                <span>{sectionProgress}%</span>
-              </div>
-              <p>{mode === "zh" ? "檢查表完成度" : mode === "bi" ? "Checklist completion | 檢查表完成度" : "Checklist completion"}</p>
+              <p><Text item={{ en: ui.en.sourceNote, zh: ui.zh.sourceNote }} mode={mode} /></p>
             </div>
           </div>
         </div>
@@ -468,7 +451,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
 
       <div className="layout">
         <aside className="sidebar" aria-label="Section navigation">
-          <p className="sideTitle">{L.jump}</p>
+          <p className="sideTitle"><Text item={{ en: ui.en.jump, zh: ui.zh.jump }} mode={mode} /></p>
           <nav>
             {sectionNav.map(item => (
               <button key={item.id} onClick={() => click(item.id)} className={active === item.id ? "navActive" : ""}>
@@ -477,14 +460,23 @@ export default function SCHM6201Class2VisualInfrastructure() {
               </button>
             ))}
           </nav>
+          <div className="sideSummary">
+            <p className="sideTitle"><Text item={{ en: "High yield path", zh: "高效閱讀路徑" }} mode={mode} /></p>
+            <ol>
+              <li><Text item={{ en: "Articles", zh: "文章案例" }} mode={mode} /></li>
+              <li><Text item={{ en: "Four OM decisions", zh: "四大營運決策" }} mode={mode} /></li>
+              <li><Text item={{ en: "CORE competencies", zh: "CORE 能力" }} mode={mode} /></li>
+              <li><Text item={{ en: "Halloran requirements", zh: "Halloran 要求" }} mode={mode} /></li>
+            </ol>
+          </div>
         </aside>
 
         <main>
-          <Section id="map" icon="compass" mode={mode} kicker="Start here" label={{ en: "One page course map", zh: "一頁課程地圖" }}>
+          <Section id="map" icon="compass" mode={mode} kicker={{ en: "Reading route", zh: "閱讀路徑" }} label={{ en: "One page course map", zh: "一頁課程地圖" }}>
             <div className="card sourceCard">
               <div>
-                <h3>{L.sources}</h3>
-                <p className="muted"><Text item={{ en: "The build separates direct article facts, slide claims, speaking notes, syllabus requirements, Master Plan assumptions, and cross source inferences.", zh: "本版區分文章直接事實、投影片說法、講稿筆記、課綱要求、Master Plan 假設，以及跨來源推論。" }} mode={mode} /></p>
+                <h3><Text item={{ en: ui.en.sources, zh: ui.zh.sources }} mode={mode} /></h3>
+                <p className="muted"><Text item={{ en: "Read claims by source type. Article facts, slide claims, speaking notes, syllabus requirements, Master Plan assumptions, and cross source inferences are kept separate.", zh: "閱讀時先看來源類型。文章事實、投影片說法、講稿筆記、課綱要求、Master Plan 假設與跨來源推論需要分開判讀。" }} mode={mode} /></p>
               </div>
               <div className="sourceGrid">
                 {sourceBasis.map((s, index) => (
@@ -515,7 +507,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="articles" icon="factory" mode={mode} kicker="Slides 1 to 3" label={{ en: "Opening articles as the applied case set", zh: "開場文章作為應用案例組" }}>
+          <Section id="articles" icon="factory" mode={mode} kicker={{ en: "Slides 1 to 3", zh: "投影片 1 至 3" }} label={{ en: "Opening articles as the applied case set", zh: "開場文章作為應用案例組" }}>
             <div className="articleGrid">
               {articleCards.map((card, index) => (
                 <article className="articleCard" key={index}>
@@ -548,7 +540,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="operations" icon="flow" mode={mode} kicker="Slides 4 to 15" label={{ en: "The Operations Function", zh: "營運職能" }}>
+          <Section id="operations" icon="flow" mode={mode} kicker={{ en: "Slides 4 to 15", zh: "投影片 4 至 15" }} label={{ en: "The Operations Function", zh: "營運職能" }}>
             <div className="twoCol">
               <div className="card">
                 <h3><Text item={{ en: "Why study Operations Management", zh: "為甚麼要學營運管理" }} mode={mode} /></h3>
@@ -609,7 +601,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="strategy" icon="target" mode={mode} kicker="Slides 16 to 29" label={{ en: "Operations and Supply Chain Strategy", zh: "營運與供應鏈策略" }}>
+          <Section id="strategy" icon="target" mode={mode} kicker={{ en: "Slides 16 to 29", zh: "投影片 16 至 29" }} label={{ en: "Operations and Supply Chain Strategy", zh: "營運與供應鏈策略" }}>
             <div className="strategyCascade">
               {strategyLevels.map((level, index) => (
                 <article key={index} className="cascadeCard">
@@ -683,7 +675,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="design" icon="layers" mode={mode} kicker="Slides 30 to 39" label={{ en: "Product Design", zh: "產品設計" }}>
+          <Section id="design" icon="layers" mode={mode} kicker={{ en: "Slides 30 to 39", zh: "投影片 30 至 39" }} label={{ en: "Product Design", zh: "產品設計" }}>
             <div className="logicBanner">
               <Icon name="layers" />
               <div>
@@ -751,7 +743,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="assignments" icon="book" mode={mode} kicker="Slides 40 to 50" label={{ en: "Case and assignments", zh: "案例與作業" }}>
+          <Section id="assignments" icon="book" mode={mode} kicker={{ en: "Slides 40 to 50", zh: "投影片 40 至 50" }} label={{ en: "Case and assignments", zh: "案例與作業" }}>
             <div className="frameworkGrid">
               {caseFramework.map(item => (
                 <div className="frameworkCard" key={item.bucketEn}>
@@ -791,7 +783,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="participation" icon="spark" mode={mode} kicker="Use in class" label={{ en: "Participation toolkit", zh: "課堂發言工具包" }}>
+          <Section id="participation" icon="spark" mode={mode} kicker={{ en: "Class discussion", zh: "課堂討論" }} label={{ en: "Participation toolkit", zh: "課堂發言工具包" }}>
             <div className="formulaBoard">
               <div><span>1</span><Text item={{ en: "Fact", zh: "事實" }} mode={mode} /></div>
               <div><span>2</span><Text item={{ en: "Operational implication", zh: "營運含義" }} mode={mode} /></div>
@@ -821,7 +813,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
           </Section>
 
-          <Section id="checklist" icon="check" mode={mode} kicker="Before class" label={{ en: "Final six point checklist", zh: "最後六點檢查表" }}>
+          <Section id="checklist" icon="check" mode={mode} kicker={{ en: "Before class", zh: "課前確認" }} label={{ en: "Final six point checklist", zh: "最後六點檢查表" }}>
             <div className="checklistPanel">
               {finalChecklist.map((item, index) => (
                 <button key={index} onClick={() => toggleCheck(index)} className={checked.includes(index) ? "checked" : ""}>
@@ -832,7 +824,7 @@ export default function SCHM6201Class2VisualInfrastructure() {
             </div>
 
             <div className="closePanel">
-              <h3>{L.close}</h3>
+              <h3><Text item={{ en: ui.en.close, zh: ui.zh.close }} mode={mode} /></h3>
               <p><Text item={{ en: "Read the article cards first, then the four OM decisions, then CORE Competencies, then Halloran requirements. That path gives the highest return before class because it matches the likely discussion flow and grading logic.", zh: "先讀文章卡片，再讀四大營運決策，再讀 CORE Competencies，最後讀 Halloran 要求。這條路徑最符合可能的課堂討論順序與評分邏輯，課前投資報酬最高。" }} mode={mode} /></p>
             </div>
           </Section>
@@ -853,48 +845,56 @@ const styles = `
 
 :root {
   --paper: #FCFAF2;
-  --ink: #1f2528;
-  --muted: #687176;
+  --ink: #202528;
+  --muted: #626B70;
   --line: rgba(37, 43, 46, 0.14);
-  --card: rgba(255, 255, 255, 0.58);
+  --card: rgba(255, 255, 255, 0.54);
+  --cardSolid: rgba(252, 250, 242, 0.82);
   --ruri: #005CAF;
   --ai: #165E83;
   --enji: #9F353A;
   --koke: #7B8D42;
   --kokiake: #86473F;
   --plum: #622954;
-  --shadow: 0 18px 45px rgba(31, 37, 40, 0.08);
+  --shadow: 0 14px 34px rgba(31, 37, 40, 0.075);
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 .class2Root {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 0%, rgba(0, 92, 175, 0.09), transparent 28rem),
-    radial-gradient(circle at 85% 8%, rgba(159, 53, 58, 0.08), transparent 30rem),
+    radial-gradient(circle at 14% 0%, rgba(0, 92, 175, 0.075), transparent 26rem),
+    radial-gradient(circle at 88% 6%, rgba(159, 53, 58, 0.065), transparent 28rem),
     var(--paper);
   color: var(--ink);
   font-family: "Source Serif 4", "Noto Serif TC", Georgia, serif;
-  line-height: 1.55;
-  padding: 28px;
+  font-size: 16px;
+  line-height: 1.58;
+  padding: 22px;
+  overflow-x: hidden;
 }
 
 .class2Root button { font-family: inherit; }
+.class2Root p { font-size: 0.98rem; line-height: 1.62; }
+.class2Root p, .class2Root li { overflow-wrap: anywhere; }
+h1, h2, h3, h4, p { margin-top: 0; }
+h3, h4 { letter-spacing: -0.012em; }
 
 .hero {
-  max-width: 1240px;
-  margin: 0 auto 24px;
+  max-width: 1180px;
+  margin: 0 auto 20px;
   border: 1px solid var(--line);
-  background: rgba(252, 250, 242, 0.82);
-  border-radius: 30px;
-  padding: 30px;
+  background: rgba(252, 250, 242, 0.86);
+  border-radius: 26px;
+  padding: 26px;
   box-shadow: var(--shadow);
 }
 
 .heroMeta, .metricWrap, .flowLegend {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -902,732 +902,440 @@ const styles = `
 .badge, .metricPill, .sourceTag {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 7px 11px;
-  background: rgba(255, 255, 255, 0.62);
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.58);
   color: var(--ai);
   font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+  line-height: 1.25;
 }
 
 .badge.ghost { color: var(--muted); }
-
-.heroGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 310px;
-  gap: 28px;
-  align-items: stretch;
-  margin-top: 22px;
-}
-
-h1, h2, h3, h4, p { margin-top: 0; }
+.heroGrid { display: block; margin-top: 20px; }
 
 h1 {
-  max-width: 980px;
-  font-size: clamp(2.35rem, 6vw, 5.4rem);
-  line-height: 0.92;
-  letter-spacing: -0.055em;
-  margin-bottom: 18px;
+  max-width: 1000px;
+  font-size: clamp(2.15rem, 5.1vw, 4.35rem);
+  line-height: 0.99;
+  letter-spacing: -0.045em;
+  margin-bottom: 15px;
   color: var(--ink);
 }
 
+.heroTitle .biZh {
+  font-size: clamp(1.32rem, 3.4vw, 2.3rem);
+  line-height: 1.15;
+  margin-top: 10px;
+  color: var(--plum);
+  letter-spacing: 0;
+}
+
 .heroSub {
-  max-width: 740px;
-  font-size: clamp(1rem, 2vw, 1.25rem);
+  max-width: 780px;
+  font-size: clamp(0.98rem, 1.8vw, 1.14rem);
   color: var(--muted);
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .heroCallout, .logicBanner {
   display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 14px;
+  grid-template-columns: 36px 1fr;
+  gap: 12px;
   align-items: start;
   border: 1px solid rgba(134, 71, 63, 0.22);
-  background: rgba(134, 71, 63, 0.07);
-  border-radius: 22px;
-  padding: 16px;
+  background: rgba(134, 71, 63, 0.065);
+  border-radius: 18px;
+  padding: 13px 14px;
+  max-width: 960px;
 }
-
-.heroCallout p, .logicBanner p { margin-bottom: 0; }
-
+.heroCallout p, .logicBanner p { margin-bottom: 0; max-width: 82ch; }
 .icon { fill: currentColor; flex: 0 0 auto; }
 
-.modePanel {
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.56);
-  padding: 18px;
-}
-
-.modePanel p, .sideTitle, .kicker {
-  color: var(--muted);
-  font-family: "JetBrains Mono", monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.modeButtons, .floatingMode {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.modeButtons button, .floatingMode button {
-  border: 1px solid var(--line);
-  background: rgba(252, 250, 242, 0.86);
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 10px 12px;
-  cursor: pointer;
-  font-weight: 800;
-}
-
-.modeButtons button.active, .floatingMode button.active {
-  background: var(--ai);
-  color: white;
-  border-color: var(--ai);
-}
-
-.progressRing {
-  display: grid;
-  grid-template-columns: 86px 1fr;
-  gap: 14px;
-  align-items: center;
-  margin-top: 18px;
-}
-
-.ring {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-}
-
-.ring span {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: var(--paper);
-  display: grid;
-  place-items: center;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-  color: var(--ai);
-}
-
 .layout {
-  max-width: 1240px;
+  max-width: 1180px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 248px minmax(0, 1fr);
-  gap: 22px;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 18px;
 }
 
 .sidebar {
   position: sticky;
-  top: 18px;
+  top: 16px;
   align-self: start;
   border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.5);
-  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.48);
+  padding: 12px;
   box-shadow: var(--shadow);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
 }
 
-.sidebar nav { display: grid; gap: 8px; }
+.sideTitle, .kicker {
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
 
+.sidebar nav { display: grid; gap: 6px; }
 .sidebar button {
   display: grid;
-  grid-template-columns: 20px 1fr;
-  gap: 10px;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
   align-items: center;
   width: 100%;
   border: 1px solid transparent;
-  border-radius: 16px;
+  border-radius: 13px;
   background: transparent;
   color: var(--muted);
-  padding: 10px;
+  padding: 8px;
   text-align: left;
   cursor: pointer;
   font-weight: 700;
+  font-size: 0.91rem;
+  line-height: 1.26;
 }
-
 .sidebar button.navActive, .sidebar button:hover {
   background: rgba(0, 92, 175, 0.08);
   color: var(--ai);
-  border-color: rgba(0, 92, 175, 0.15);
+  border-color: rgba(0, 92, 175, 0.14);
 }
 
-main { display: grid; gap: 22px; min-width: 0; }
+.sideSummary {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.sideSummary ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+.sideSummary li { margin: 4px 0; }
 
+main { display: grid; gap: 18px; min-width: 0; }
 .sectionBlock {
   border: 1px solid var(--line);
-  border-radius: 30px;
+  border-radius: 26px;
   background: rgba(252, 250, 242, 0.78);
-  padding: 24px;
+  padding: 20px;
   box-shadow: var(--shadow);
-  scroll-margin-top: 20px;
+  scroll-margin-top: 18px;
+  min-width: 0;
 }
 
 .sectionHead {
   display: grid;
-  grid-template-columns: 48px 1fr;
-  gap: 14px;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
-
 .sectionIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
   background: var(--ai);
   color: white;
   display: grid;
   place-items: center;
 }
-
 .sectionHead h2 {
-  font-size: clamp(1.55rem, 3vw, 2.5rem);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  font-size: clamp(1.38rem, 2.8vw, 2.08rem);
+  letter-spacing: -0.028em;
+  line-height: 1.1;
   margin-bottom: 0;
 }
 
 .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel {
   border: 1px solid var(--line);
   background: var(--card);
-  border-radius: 24px;
-  padding: 18px;
+  border-radius: 20px;
+  padding: 15px;
+  min-width: 0;
 }
+
+.card h3, .articleCard h3, .decisionCard h3, .timelineItem h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3 {
+  font-size: 1.06rem;
+  line-height: 1.22;
+  margin-bottom: 7px;
+}
+.card h4, .articleCard h4 { font-size: 0.98rem; }
+.muted { color: var(--muted); }
+.logicBanner { margin-top: 14px; }
 
 .sourceCard {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-  gap: 18px;
-  margin-bottom: 16px;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 14px;
+  margin-bottom: 14px;
 }
-
-.sourceGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
+.sourceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .sourceItem {
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 12px;
-  background: rgba(252, 250, 242, 0.68);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(252, 250, 242, 0.66);
   display: grid;
-  gap: 7px;
+  gap: 5px;
+  font-size: 0.9rem;
 }
-
 .sourceItem span, .slideRange, .articleIndex, .sourceTag, .cascadeNum, .npdFlow span, .dfmSteps span, .checklistPanel button span, .focusList span, .formulaBoard span {
   font-family: "JetBrains Mono", monospace;
   font-weight: 800;
 }
+.sourceItem span { color: var(--enji); font-size: 0.66rem; text-transform: uppercase; }
 
-.sourceItem span { color: var(--enji); font-size: 11px; text-transform: uppercase; }
+.timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.timelineItem { min-height: 150px; }
+.slideRange { color: var(--ruri); font-size: 0.72rem; margin-bottom: 8px; }
 
-.timeline {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.timelineItem { min-height: 210px; }
-
-.slideRange {
-  color: var(--ruri);
-  font-size: 12px;
-  margin-bottom: 12px;
-}
-
-.timelineItem h3, .articleCard h3, .decisionCard h3, .card h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3 {
-  font-size: 1.23rem;
-  line-height: 1.15;
-  margin-bottom: 9px;
-}
-
-.muted { color: var(--muted); }
-
-.logicBanner { margin-top: 16px; }
-
-.articleGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.articleCard {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-}
-
-.articleTop {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-}
-
+.articleGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.articleCard { display: grid; gap: 11px; align-content: start; }
+.articleTop { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
 .articleIndex {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: var(--plum);
-  color: white;
-  display: grid;
-  place-items: center;
+  width: 36px; height: 36px; border-radius: 12px;
+  background: var(--plum); color: white; display: grid; place-items: center;
 }
-
+.metricWrap { row-gap: 7px; }
+.metricPill { font-size: 0.68rem; padding: 5px 8px; }
 .cautionBox {
-  border-left: 4px solid var(--enji);
-  background: rgba(159, 53, 58, 0.06);
-  border-radius: 14px;
-  padding: 12px;
+  border-left: 3px solid var(--enji);
+  background: rgba(159, 53, 58, 0.055);
+  border-radius: 12px;
+  padding: 10px 11px;
 }
-
 .cautionBox p { margin-bottom: 0; color: var(--muted); }
+.visualModel.wide { margin-top: 12px; }
 
-.visualModel.wide { margin-top: 14px; }
-
-.chain, .formulaBoard {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin: 14px 0;
-}
-
+.chain, .formulaBoard { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
 .chain div, .formulaBoard div {
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(0, 92, 175, 0.06);
-  min-height: 92px;
+  border-radius: 15px;
+  padding: 11px;
+  background: rgba(0, 92, 175, 0.055);
+  min-height: 78px;
+  font-size: 0.93rem;
 }
-
 .chain span, .formulaBoard span {
-  display: inline-grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--ruri);
-  color: white;
-  margin-bottom: 10px;
+  display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--ruri); color: white; margin-bottom: 7px; font-size: 0.74rem;
 }
 
-.twoCol {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 14px;
-}
+.twoCol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
+.cleanList { margin: 0; padding-left: 18px; }
+.cleanList li { margin: 6px 0; }
+.definitionCard { background: rgba(123, 141, 66, 0.075); }
 
-.cleanList { margin: 0; padding-left: 20px; }
-.cleanList li { margin: 8px 0; }
-
-.definitionCard { background: rgba(123, 141, 66, 0.08); }
-
-.decisionGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
+.decisionGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
 .decisionCard {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.48);
-  border-radius: 22px;
-  padding: 16px;
+  border-radius: 18px;
+  padding: 13px;
 }
-
 .decisionCard > span {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: var(--koke);
-  color: white;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-  margin-bottom: 14px;
+  width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center;
+  background: var(--koke); color: white; font-family: "JetBrains Mono", monospace;
+  font-weight: 800; margin-bottom: 10px; font-size: 0.78rem;
 }
-
 .question { color: var(--ai); font-weight: 800; }
 
-.miniTable { display: grid; gap: 8px; }
-.miniRow {
-  display: grid;
-  grid-template-columns: 0.7fr 0.9fr 1.4fr;
-  gap: 10px;
-  align-items: stretch;
-}
+.miniTable { display: grid; gap: 7px; }
+.miniRow { display: grid; grid-template-columns: 0.72fr 0.9fr 1.45fr; gap: 8px; align-items: stretch; }
 .miniRow > div {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(252, 250, 242, 0.72);
+  border: 1px solid var(--line); border-radius: 12px; padding: 9px;
+  background: rgba(252, 250, 242, 0.72); font-size: 0.93rem;
 }
 .miniKey { font-weight: 800; color: var(--ai); }
 .miniNote { color: var(--muted); }
 
-.flowBoard { margin-top: 14px; }
+.flowBoard { margin-top: 12px; }
 .flowNodes {
   display: grid;
   grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
-  gap: 8px;
-  align-items: center;
-  margin: 14px 0;
+  gap: 7px; align-items: center; margin: 12px 0;
 }
 .flowNode {
-  min-height: 82px;
+  min-height: 68px;
   border: 1px solid rgba(0, 92, 175, 0.22);
-  background: rgba(0, 92, 175, 0.06);
-  border-radius: 18px;
-  padding: 12px;
+  background: rgba(0, 92, 175, 0.055);
+  border-radius: 15px;
+  padding: 10px;
   display: grid;
   place-items: center;
   text-align: center;
   font-weight: 800;
+  font-size: 0.92rem;
 }
-.flowArrow, .processArrow { color: var(--enji); font-size: 32px; font-weight: 800; text-align: center; }
+.flowArrow, .processArrow { color: var(--enji); font-size: 26px; font-weight: 800; text-align: center; line-height: 1; }
 
 .processModel {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  align-items: center;
-  gap: 10px;
-  margin-top: 14px;
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center; gap: 8px; margin-top: 12px;
 }
 .processBox {
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  min-height: 122px;
-  padding: 18px;
+  border: 1px solid var(--line); border-radius: 20px; min-height: 104px; padding: 14px;
   background: rgba(255, 255, 255, 0.48);
-  display: grid;
-  align-content: center;
-  text-align: center;
-  font-weight: 900;
+  display: grid; align-content: center; text-align: center; font-weight: 900;
 }
 .processBox small {
-  display: block;
-  color: var(--muted);
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  margin-top: 8px;
+  display: block; color: var(--muted); font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem; margin-top: 7px; line-height: 1.35;
 }
-.processBox.highlight { background: rgba(159, 53, 58, 0.08); }
+.processBox.highlight { background: rgba(159, 53, 58, 0.075); }
 
-.strategyCascade {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 14px;
-}
+.strategyCascade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
 .cascadeCard {
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 18px;
-  background: rgba(255, 255, 255, 0.5);
-  position: relative;
-  overflow: hidden;
+  border: 1px solid var(--line); border-radius: 20px; padding: 15px;
+  background: rgba(255, 255, 255, 0.5); position: relative; overflow: hidden;
 }
 .cascadeNum {
-  width: 38px;
-  height: 38px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  background: var(--ai);
-  color: white;
-  margin-bottom: 12px;
+  width: 32px; height: 32px; border-radius: 12px; display: grid; place-items: center;
+  background: var(--ai); color: white; margin-bottom: 10px; font-size: 0.78rem;
 }
-.questionBox {
-  border-top: 1px solid var(--line);
-  margin-top: 14px;
-  padding-top: 12px;
-  color: var(--enji);
-  font-weight: 800;
-}
+.questionBox { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; color: var(--enji); font-weight: 800; }
 
-.swotGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.swotBox {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(252, 250, 242, 0.66);
-}
-.swotBox span { font-size: 12px; color: var(--muted); font-family: "JetBrains Mono", monospace; }
-.swotBox h4 { margin: 8px 0; color: var(--ai); font-size: 1.15rem; }
+.swotGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.swotBox { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.66); }
+.swotBox span { font-size: 0.68rem; color: var(--muted); font-family: "JetBrains Mono", monospace; }
+.swotBox h4 { margin: 6px 0; color: var(--ai); font-size: 1.02rem; }
 .opsLine { color: var(--enji); font-weight: 800; }
 
 .coreBoard {
-  min-height: 420px;
+  min-height: 382px;
   border: 1px solid var(--line);
-  border-radius: 28px;
+  border-radius: 24px;
   background: rgba(255, 255, 255, 0.42);
-  margin: 14px 0;
+  margin: 12px 0;
   position: relative;
   display: grid;
   place-items: center;
   overflow: hidden;
 }
-.coreBoard::before {
-  content: "";
-  position: absolute;
-  width: 52%;
-  height: 52%;
-  border: 1px dashed rgba(0, 92, 175, 0.35);
-  transform: rotate(45deg);
-}
+.coreBoard::before { content: ""; position: absolute; width: 48%; height: 48%; border: 1px dashed rgba(0, 92, 175, 0.34); transform: rotate(45deg); }
 .coreCenter {
-  z-index: 2;
-  width: 156px;
-  height: 156px;
-  border-radius: 50%;
-  background: var(--plum);
-  color: white;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-  line-height: 1.25;
+  z-index: 2; width: 134px; height: 134px; border-radius: 50%; background: var(--plum); color: white;
+  display: grid; place-items: center; text-align: center; font-family: "JetBrains Mono", monospace; font-weight: 800; line-height: 1.22; font-size: 0.9rem;
 }
 .corePoint {
-  position: absolute;
-  width: 270px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 14px;
-  background: rgba(252, 250, 242, 0.9);
-  z-index: 3;
+  position: absolute; width: min(255px, 30%); border: 1px solid var(--line); border-radius: 17px; padding: 12px;
+  background: rgba(252, 250, 242, 0.91); z-index: 3;
 }
-.corePoint h3 { margin-bottom: 6px; }
-.corePoint p { margin-bottom: 0; color: var(--muted); }
-.point1 { top: 22px; left: 50%; transform: translateX(-50%); }
-.point2 { left: 24px; bottom: 34px; }
-.point3 { right: 24px; bottom: 34px; }
+.corePoint h3 { margin-bottom: 5px; }
+.corePoint p { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
+.point1 { top: 18px; left: 50%; transform: translateX(-50%); }
+.point2 { left: 18px; bottom: 26px; }
+.point3 { right: 18px; bottom: 26px; }
 
-.riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 14px 0;
-}
+.riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
 .riskItem, .toolCard, .frameworkCard, .participationGrid article, .assignmentCard {
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.46);
+  border: 1px solid var(--line); border-radius: 17px; padding: 12px; background: rgba(255, 255, 255, 0.46);
 }
-.riskItem h4, .toolCard h3, .frameworkCard h3, .participationGrid h3 { color: var(--ai); margin-bottom: 7px; }
+.riskItem h4, .toolCard h3, .frameworkCard h3, .participationGrid h3 { color: var(--ai); margin-bottom: 6px; }
 .riskItem p, .toolCard p, .frameworkCard p, .participationGrid p { margin-bottom: 0; color: var(--muted); }
 
-.compareTable {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.compareTable div {
-  padding: 12px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(252, 250, 242, 0.64);
-}
+.compareTable { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
+.compareTable div { padding: 9px; border-bottom: 1px solid var(--line); background: rgba(252, 250, 242, 0.64); font-size: 0.94rem; }
 .compareTable div:nth-last-child(1), .compareTable div:nth-last-child(2) { border-bottom: none; }
 .compareHead { background: rgba(0, 92, 175, 0.09) !important; font-weight: 900; color: var(--ai); }
 
-.npdFlow {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 14px 0;
-}
-.npdFlow article {
-  border: 1px solid rgba(123, 141, 66, 0.26);
-  border-radius: 24px;
-  padding: 18px;
-  background: rgba(123, 141, 66, 0.08);
-}
-.npdFlow span {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  background: var(--koke);
-  color: white;
-  margin-bottom: 12px;
-}
+.npdFlow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+.npdFlow article { border: 1px solid rgba(123, 141, 66, 0.26); border-radius: 20px; padding: 14px; background: rgba(123, 141, 66, 0.075); }
+.npdFlow span { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--koke); color: white; margin-bottom: 10px; font-size: 0.78rem; }
 
-.dfmBoard { margin: 14px 0; }
-.dfmSteps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-.dfmSteps article {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(252, 250, 242, 0.68);
-}
-.dfmSteps span {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--enji);
-  color: white;
-  margin-bottom: 10px;
-}
+.dfmBoard { margin: 12px 0; }
+.dfmSteps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.dfmSteps article { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.68); }
+.dfmSteps span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--enji); color: white; margin-bottom: 8px; font-size: 0.74rem; }
 
-.platformGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.platformGrid div {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(252, 250, 242, 0.68);
-}
+.platformGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.platformGrid div { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.68); }
 
-.focusList { display: grid; gap: 8px; }
+.focusList { display: grid; gap: 7px; }
 .focusList div {
-  display: grid;
-  grid-template-columns: 32px 1fr;
-  gap: 10px;
-  align-items: start;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px;
-  background: rgba(252, 250, 242, 0.68);
+  display: grid; grid-template-columns: 30px 1fr; gap: 8px; align-items: start;
+  border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: rgba(252, 250, 242, 0.68);
 }
-.focusList span {
-  width: 26px;
-  height: 26px;
-  border-radius: 9px;
-  background: var(--ai);
-  color: white;
-  display: grid;
-  place-items: center;
-}
+.focusList span { width: 24px; height: 24px; border-radius: 8px; background: var(--ai); color: white; display: grid; place-items: center; font-size: 0.73rem; }
 
+.scheduleCard { overflow-x: auto; }
 .scheduleTable {
   display: grid;
-  grid-template-columns: 0.45fr 0.7fr 2fr 1fr;
+  grid-template-columns: 52px 78px minmax(320px, 1fr) 150px;
+  min-width: 720px;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 15px;
   overflow: hidden;
+  font-size: 0.9rem;
 }
-.scheduleTable div {
-  padding: 10px;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: rgba(252, 250, 242, 0.68);
-}
+.scheduleTable div { padding: 8px 9px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(252, 250, 242, 0.68); }
 .scheduleTable div:nth-child(4n) { border-right: none; }
 .scheduleHead { background: rgba(0, 92, 175, 0.09) !important; color: var(--ai); font-weight: 900; }
 .dueCell { color: var(--enji); font-weight: 900; }
 
-.checklistPanel {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
+.checklistPanel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
 .checklistPanel button {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--ink);
-  text-align: left;
-  cursor: pointer;
-  display: grid;
-  grid-template-columns: 34px 1fr;
-  gap: 10px;
-  align-items: start;
-  font-weight: 750;
+  border: 1px solid var(--line); border-radius: 16px; padding: 11px; background: rgba(255, 255, 255, 0.5); color: var(--ink);
+  text-align: left; cursor: pointer; display: grid; grid-template-columns: 30px 1fr; gap: 9px; align-items: start; font-weight: 750; font-size: 0.95rem; line-height: 1.38;
 }
-.checklistPanel button span {
-  width: 28px;
-  height: 28px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: rgba(104, 113, 118, 0.12);
-  color: var(--muted);
-}
-.checklistPanel button.checked {
-  border-color: rgba(123, 141, 66, 0.45);
-  background: rgba(123, 141, 66, 0.11);
-}
-.checklistPanel button.checked span {
-  background: var(--koke);
-  color: white;
-}
-.closePanel { margin-top: 14px; background: rgba(0, 92, 175, 0.06); }
+.checklistPanel button span { width: 25px; height: 25px; border-radius: 9px; display: grid; place-items: center; background: rgba(104, 113, 118, 0.12); color: var(--muted); font-size: 0.74rem; }
+.checklistPanel button.checked { border-color: rgba(123, 141, 66, 0.45); background: rgba(123, 141, 66, 0.11); }
+.checklistPanel button.checked span { background: var(--koke); color: white; }
+.closePanel { margin-top: 12px; background: rgba(0, 92, 175, 0.055); }
 
 .floatingMode {
   position: fixed;
-  right: 20px;
-  bottom: 18px;
-  width: min(310px, calc(100vw - 40px));
+  right: 16px;
+  bottom: 14px;
+  width: 154px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 8px;
-  background: rgba(252, 250, 242, 0.9);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow);
+  padding: 4px;
+  background: rgba(252, 250, 242, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(31, 37, 40, 0.12);
   z-index: 20;
 }
-.floatingMode button { padding: 8px 10px; font-family: "JetBrains Mono", monospace; font-size: 12px; }
+.floatingMode button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 5px;
+  cursor: pointer;
+  font-weight: 800;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  line-height: 1;
+}
+.floatingMode button.active { background: var(--ai); color: white; border-color: var(--ai); }
 
 .biEn, .biZh { display: block; }
-.biZh {
-  font-family: "Noto Serif TC", "Source Serif 4", serif;
-  color: var(--muted);
-  margin-top: 4px;
-}
+.biZh { font-family: "Noto Serif TC", "Source Serif 4", serif; color: var(--muted); margin-top: 3px; }
 
-@media (max-width: 1050px) {
-  .class2Root { padding: 18px; }
-  .heroGrid, .layout, .sourceCard { grid-template-columns: 1fr; }
-  .sidebar {
-    position: relative;
-    top: auto;
-    overflow-x: auto;
-  }
-  .sidebar nav {
-    display: flex;
-    min-width: max-content;
-  }
-  .sidebar button { width: 210px; }
+@media (max-width: 1080px) {
+  .class2Root { padding: 16px; }
+  .layout, .sourceCard { grid-template-columns: 1fr; }
+  .sidebar { position: sticky; top: 8px; z-index: 8; max-height: none; overflow-x: auto; }
+  .sidebar nav { display: flex; min-width: max-content; }
+  .sidebar button { width: 178px; }
+  .sideSummary { display: none; }
   .timeline, .decisionGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .strategyCascade, .npdFlow, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .flowNodes { grid-template-columns: 1fr; }
@@ -1635,30 +1343,42 @@ main { display: grid; gap: 22px; min-width: 0; }
 }
 
 @media (max-width: 760px) {
-  .class2Root { padding: 12px; }
-  .hero, .sectionBlock { padding: 16px; border-radius: 22px; }
-  h1 { font-size: clamp(2rem, 15vw, 3.3rem); }
-  .heroMeta { align-items: stretch; }
-  .badge { width: 100%; justify-content: center; }
-  .modePanel { padding: 14px; }
-  .progressRing { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .class2Root { padding: 10px; font-size: 15px; }
+  .hero, .sectionBlock { padding: 14px; border-radius: 20px; }
+  .heroMeta { gap: 6px; }
+  .badge { max-width: 100%; }
+  h1 { font-size: clamp(1.82rem, 10.5vw, 2.72rem); line-height: 1.04; letter-spacing: -0.035em; }
+  .heroTitle .biZh { font-size: clamp(1.14rem, 6vw, 1.56rem); }
+  .heroSub { font-size: 0.95rem; margin-bottom: 14px; }
+  .heroCallout, .logicBanner { grid-template-columns: 28px 1fr; gap: 9px; padding: 11px; border-radius: 15px; }
+  .sectionHead { grid-template-columns: 36px 1fr; gap: 10px; }
+  .sectionIcon { width: 36px; height: 36px; border-radius: 12px; }
+  .sectionHead h2 { font-size: 1.32rem; }
+  .sidebar { border-radius: 16px; padding: 9px; }
+  .sidebar button { width: 154px; font-size: 0.84rem; padding: 7px; }
   .timeline, .articleGrid, .twoCol, .decisionGrid, .strategyCascade, .swotGrid, .npdFlow, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .checklistPanel, .platformGrid, .dfmSteps, .sourceGrid, .chain, .formulaBoard { grid-template-columns: 1fr; }
   .miniRow { grid-template-columns: 1fr; }
   .processModel { grid-template-columns: 1fr; }
   .processArrow { transform: rotate(90deg); }
-  .coreBoard { min-height: auto; padding: 16px; display: grid; gap: 12px; }
+  .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel { padding: 12px; border-radius: 16px; }
+  .coreBoard { min-height: auto; padding: 12px; display: grid; gap: 10px; }
   .coreBoard::before { display: none; }
-  .coreCenter { width: auto; height: auto; border-radius: 20px; padding: 18px; }
+  .coreCenter { width: auto; height: auto; border-radius: 16px; padding: 14px; }
   .corePoint { position: static; width: auto; transform: none; }
-  .scheduleTable { grid-template-columns: 0.55fr 0.9fr 1.8fr 1fr; font-size: 12px; overflow-x: auto; }
-  .scheduleTable div { padding: 8px; }
-  .sectionHead { grid-template-columns: 40px 1fr; }
-  .sectionIcon { width: 40px; height: 40px; border-radius: 14px; }
-  .floatingMode { right: 10px; bottom: 10px; width: calc(100vw - 20px); }
+  .floatingMode { right: 10px; bottom: 10px; width: 136px; }
+  .floatingMode button { font-size: 0.62rem; padding: 6px 3px; }
+}
+
+@media (max-width: 430px) {
+  .class2Root { padding: 8px; }
+  .hero, .sectionBlock { padding: 12px; }
+  .badge { font-size: 0.65rem; padding: 5px 8px; }
+  .metricPill { white-space: normal; }
+  .floatingMode { width: 126px; }
 }
 
 @media print {
-  .floatingMode, .sidebar, .modePanel { display: none; }
+  .floatingMode, .sidebar { display: none; }
   .class2Root { padding: 0; background: white; }
   .layout, .heroGrid { grid-template-columns: 1fr; }
   .sectionBlock, .hero { box-shadow: none; break-inside: avoid; }
