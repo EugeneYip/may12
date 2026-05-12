@@ -420,9 +420,14 @@ function MiniTable({ rows, mode }) {
 
 export default function SCHM6201Class2VisualInfrastructure() {
   const [mode, setMode] = useState("en");
+  const [modeOpen, setModeOpen] = useState(false);
   const { active, click } = useActiveSection();
   const [checked, setChecked] = useState([]);
 
+  const selectMode = nextMode => {
+    setMode(nextMode);
+    setModeOpen(false);
+  };
 
   const toggleCheck = index => {
     setChecked(prev => prev.includes(index) ? prev.filter(x => x !== index) : [...prev, index]);
@@ -831,10 +836,22 @@ export default function SCHM6201Class2VisualInfrastructure() {
         </main>
       </div>
 
-      <div className="floatingMode" aria-label="Floating language controls">
-        <button onClick={() => setMode("en")} className={mode === "en" ? "active" : ""}>EN</button>
-        <button onClick={() => setMode("zh")} className={mode === "zh" ? "active" : ""}>中</button>
-        <button onClick={() => setMode("bi")} className={mode === "bi" ? "active" : ""}>EN 中</button>
+      <div className={`modeDock ${modeOpen ? "open" : ""}`} aria-label="Language controls">
+        <button
+          type="button"
+          className="modeToggle"
+          onClick={() => setModeOpen(prev => !prev)}
+          aria-expanded={modeOpen}
+          aria-controls="language-mode-menu"
+        >
+          <span>{mode === "en" ? "Language" : mode === "zh" ? "語言" : "Lang"}</span>
+          <strong>{mode === "en" ? "EN" : mode === "zh" ? "中" : "EN / 中"}</strong>
+        </button>
+        <div id="language-mode-menu" className="modeMenu">
+          <button type="button" onClick={() => selectMode("en")} className={mode === "en" ? "active" : ""}>English</button>
+          <button type="button" onClick={() => selectMode("zh")} className={mode === "zh" ? "active" : ""}>中文</button>
+          <button type="button" onClick={() => selectMode("bi")} className={mode === "bi" ? "active" : ""}>EN / 中</button>
+        </div>
       </div>
     </div>
   );
@@ -1383,4 +1400,167 @@ main { display: grid; gap: 18px; min-width: 0; }
   .layout, .heroGrid { grid-template-columns: 1fr; }
   .sectionBlock, .hero { box-shadow: none; break-inside: avoid; }
 }
+
+
+/* v3 visual debugging pass: density, contrast, overflow control, and collapsed language control */
+.class2Root, .class2Root * { min-width: 0; }
+.class2Root p, .class2Root li, .class2Root h1, .class2Root h2, .class2Root h3, .class2Root h4, .class2Root span, .class2Root button, .class2Root div { overflow-wrap: anywhere; word-break: normal; }
+.class2Root { font-size: 15.5px; line-height: 1.55; padding-bottom: 92px; }
+.class2Root p { font-size: 0.95rem; line-height: 1.55; }
+.class2Root li { line-height: 1.5; }
+
+.hero { padding: 22px; background: rgba(252, 250, 242, 0.94); }
+h1 { font-size: clamp(2rem, 4.5vw, 3.72rem); line-height: 1.02; max-width: 960px; }
+.heroSub { font-size: clamp(0.95rem, 1.45vw, 1.08rem); max-width: 75ch; color: #4F585C; }
+.heroTitle .biZh { font-size: clamp(1.18rem, 2.75vw, 1.92rem); line-height: 1.2; }
+
+.badge, .metricPill, .sourceTag { background: rgba(252, 250, 242, 0.96); color: var(--ai); }
+.badge.ghost { color: #4F585C; }
+.sectionBlock { padding: 18px; overflow: visible; background: rgba(252, 250, 242, 0.9); }
+.sectionHead { grid-template-columns: 38px minmax(0,1fr); margin-bottom: 14px; }
+.sectionIcon { width: 38px; height: 38px; border-radius: 12px; }
+.sectionHead h2 { font-size: clamp(1.24rem, 2.15vw, 1.72rem); line-height: 1.18; letter-spacing: -0.018em; }
+.kicker, .sideTitle { font-size: 0.64rem; letter-spacing: 0.065em; }
+
+.card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel,
+.decisionCard, .riskItem, .toolCard, .frameworkCard, .participationGrid article, .cascadeCard, .swotBox, .dfmSteps article, .platformGrid div, .sourceItem, .focusList div, .chain div, .formulaBoard div, .miniRow > div, .processBox, .npdFlow article {
+  background: rgba(252, 250, 242, 0.96);
+  color: var(--ink);
+  overflow: visible;
+}
+.card h3, .articleCard h3, .decisionCard h3, .timelineItem h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3, .toolCard h3, .frameworkCard h3, .participationGrid h3 {
+  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+  line-height: 1.25;
+  margin-bottom: 0.45rem;
+}
+.card h4, .articleCard h4, .dfmSteps h4, .swotBox h4 { font-size: 0.95rem; line-height: 1.3; }
+.muted, .miniNote, .riskItem p, .toolCard p, .frameworkCard p, .participationGrid p, .cautionBox p, .corePoint p, .sideSummary ol { color: #4F585C; }
+.biZh { color: #4F585C; font-size: 0.96em; line-height: 1.45; margin-top: 0.22rem; }
+
+.articleGrid, .twoCol, .strategyCascade, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .npdFlow, .dfmSteps, .checklistPanel, .platformGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 10px;
+}
+.decisionGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); }
+.timeline { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.sourceGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
+.chain, .formulaBoard { grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); }
+
+.toolGrid, .dfmBoard, .focusList, .participationGrid, .checklistPanel { align-items: stretch; }
+.toolCard, .frameworkCard, .assignmentCard, .participationGrid article, .dfmSteps article { padding: 13px; }
+.dfmBoard > h3 { max-width: 68ch; }
+.dfmSteps article p, .participationGrid article p, .assignmentCard li, .focusList div { font-size: 0.93rem; line-height: 1.48; }
+.focusList { gap: 8px; }
+.focusList div { grid-template-columns: 28px minmax(0, 1fr); padding: 10px; align-items: start; }
+.focusList span { width: 24px; height: 24px; flex: 0 0 auto; color: #fff; }
+
+.checklistPanel button {
+  background: rgba(252, 250, 242, 0.96);
+  color: var(--ink);
+  min-height: auto;
+  padding: 10px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  font-size: 0.92rem;
+  line-height: 1.42;
+}
+.checklistPanel button span { width: 24px; height: 24px; color: #4F585C; }
+.checklistPanel button.checked span { color: #fff; }
+.closePanel { padding: 14px; }
+
+.coreBoard { overflow: visible; padding: 14px; min-height: 360px; }
+.corePoint { width: min(260px, 32%); color: var(--ink); }
+.coreCenter { color: #fff; }
+.coreCenter .biZh { color: rgba(255,255,255,.9); }
+
+.scheduleCard { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scheduleTable { font-size: 0.86rem; }
+.scheduleTable div { background: rgba(252,250,242,.96); color: var(--ink); line-height: 1.35; }
+.scheduleHead { color: var(--ai) !important; }
+.dueCell { color: var(--enji) !important; }
+
+.sidebar { background: rgba(252,250,242,.96); }
+.sidebar button { font-size: 0.86rem; line-height: 1.25; }
+.sideSummary { font-size: 0.84rem; }
+
+.floatingMode { display: none !important; }
+.modeDock {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  font-family: "JetBrains Mono", monospace;
+}
+.modeToggle {
+  border: 1px solid rgba(37,43,46,.18);
+  background: rgba(252,250,242,.96);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 7px 10px;
+  min-width: 92px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  box-shadow: 0 10px 24px rgba(31,37,40,.12);
+  cursor: pointer;
+}
+.modeToggle span { font-size: 0.58rem; color: #5B6469; text-transform: uppercase; letter-spacing: .05em; }
+.modeToggle strong { font-size: 0.72rem; color: var(--ai); white-space: nowrap; }
+.modeMenu {
+  display: none;
+  min-width: 132px;
+  border: 1px solid rgba(37,43,46,.18);
+  border-radius: 16px;
+  padding: 6px;
+  background: rgba(252,250,242,.98);
+  box-shadow: 0 12px 28px rgba(31,37,40,.14);
+}
+.modeDock.open .modeMenu { display: grid; gap: 4px; }
+.modeMenu button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #4F585C;
+  border-radius: 11px;
+  padding: 7px 9px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.74rem;
+  line-height: 1.2;
+  font-weight: 800;
+}
+.modeMenu button:hover, .modeMenu button.active { background: rgba(0,92,175,.09); color: var(--ai); border-color: rgba(0,92,175,.12); }
+
+@media (max-width: 1080px) {
+  .sidebar { position: sticky; top: 8px; z-index: 8; overflow-x: auto; padding: 8px; }
+  .sidebar nav { display: flex; gap: 6px; }
+  .sidebar button { min-width: 148px; width: auto; padding: 7px 8px; }
+}
+
+@media (max-width: 760px) {
+  .class2Root { padding: 10px; padding-bottom: 86px; font-size: 14.8px; }
+  .hero, .sectionBlock { padding: 12px; border-radius: 18px; }
+  h1 { font-size: clamp(1.72rem, 8.8vw, 2.38rem); line-height: 1.08; letter-spacing: -0.026em; }
+  .heroTitle .biZh { font-size: clamp(1.02rem, 5.3vw, 1.36rem); }
+  .sectionHead { grid-template-columns: 34px minmax(0,1fr); gap: 9px; }
+  .sectionIcon { width: 34px; height: 34px; }
+  .sectionHead h2 { font-size: 1.18rem; line-height: 1.22; }
+  .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel, .toolCard, .frameworkCard, .participationGrid article { padding: 11px; border-radius: 14px; }
+  .formulaBoard div, .chain div { min-height: auto; }
+  .coreBoard { display: grid; gap: 9px; min-height: auto; overflow: visible; }
+  .coreBoard::before { display: none; }
+  .coreCenter { width: auto; height: auto; border-radius: 14px; padding: 12px; }
+  .corePoint { position: static; width: auto; transform: none; }
+  .modeDock { right: 10px; bottom: 10px; }
+  .modeToggle { min-width: 78px; padding: 7px 9px; }
+  .modeToggle span { display: none; }
+  .modeMenu { min-width: 116px; }
+}
+
+@media print {
+  .modeDock { display: none !important; }
+}
+
 `;
