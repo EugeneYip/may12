@@ -372,16 +372,17 @@ function useActiveSection() {
 
 function Text({ item, mode, as = "span", className = "" }) {
   const Tag = as;
-  if (mode === "zh") return <Tag className={className}>{item.zh}</Tag>;
+  const mergedClassName = ["langText", className].filter(Boolean).join(" ");
+  if (mode === "zh") return <Tag className={mergedClassName}>{item.zh}</Tag>;
   if (mode === "bi") {
     return (
-      <Tag className={className}>
+      <Tag className={mergedClassName}>
         <span className="biEn">{item.en}</span>
         <span className="biZh">{item.zh}</span>
       </Tag>
     );
   }
-  return <Tag className={className}>{item.en}</Tag>;
+  return <Tag className={mergedClassName}>{item.en}</Tag>;
 }
 
 function Section({ id, icon, label, mode, children, kicker }) {
@@ -858,1153 +859,304 @@ export default function SCHM6201Class2VisualInfrastructure() {
 }
 
 const styles = `
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Noto+Serif+TC:wght@500;700;900&family=Source+Serif+4:opsz,wght@8..60,500;8..60,650;8..60,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Noto+Serif+TC:wght@500;700;900&family=Source+Serif+4:opsz,wght@8..60,500;8..60,650;8..60,750;8..60,850&display=swap');
 
-:root {
-  --paper: #FCFAF2;
-  --ink: #202528;
-  --muted: #626B70;
-  --line: rgba(37, 43, 46, 0.14);
-  --card: rgba(255, 255, 255, 0.54);
-  --cardSolid: rgba(252, 250, 242, 0.82);
-  --ruri: #005CAF;
-  --ai: #165E83;
-  --enji: #9F353A;
-  --koke: #7B8D42;
-  --kokiake: #86473F;
-  --plum: #622954;
-  --shadow: 0 14px 34px rgba(31, 37, 40, 0.075);
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
-.class2Root {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 14% 0%, rgba(0, 92, 175, 0.075), transparent 26rem),
-    radial-gradient(circle at 88% 6%, rgba(159, 53, 58, 0.065), transparent 28rem),
-    var(--paper);
-  color: var(--ink);
-  font-family: "Source Serif 4", "Noto Serif TC", Georgia, serif;
-  font-size: 16px;
-  line-height: 1.58;
-  padding: 22px;
-  overflow-x: hidden;
-}
-
-.class2Root button { font-family: inherit; }
-.class2Root p { font-size: 0.98rem; line-height: 1.62; }
-.class2Root p, .class2Root li { overflow-wrap: anywhere; }
-h1, h2, h3, h4, p { margin-top: 0; }
-h3, h4 { letter-spacing: -0.012em; }
-
-.hero {
-  max-width: 1180px;
-  margin: 0 auto 20px;
-  border: 1px solid var(--line);
-  background: rgba(252, 250, 242, 0.86);
-  border-radius: 26px;
-  padding: 26px;
-  box-shadow: var(--shadow);
-}
-
-.heroMeta, .metricWrap, .flowLegend {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.badge, .metricPill, .sourceTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.58);
-  color: var(--ai);
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
-}
-
-.badge.ghost { color: var(--muted); }
-.heroGrid { display: block; margin-top: 20px; }
-
-h1 {
-  max-width: 1000px;
-  font-size: clamp(2.15rem, 5.1vw, 4.35rem);
-  line-height: 0.99;
-  letter-spacing: -0.045em;
-  margin-bottom: 15px;
-  color: var(--ink);
-}
-
-.heroTitle .biZh {
-  font-size: clamp(1.32rem, 3.4vw, 2.3rem);
-  line-height: 1.15;
-  margin-top: 10px;
-  color: var(--plum);
-  letter-spacing: 0;
-}
-
-.heroSub {
-  max-width: 780px;
-  font-size: clamp(0.98rem, 1.8vw, 1.14rem);
-  color: var(--muted);
-  margin-bottom: 18px;
-}
-
-.heroCallout, .logicBanner {
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  gap: 12px;
-  align-items: start;
-  border: 1px solid rgba(134, 71, 63, 0.22);
-  background: rgba(134, 71, 63, 0.065);
-  border-radius: 18px;
-  padding: 13px 14px;
-  max-width: 960px;
-}
-.heroCallout p, .logicBanner p { margin-bottom: 0; max-width: 82ch; }
-.icon { fill: currentColor; flex: 0 0 auto; }
-
-.layout {
-  max-width: 1180px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 18px;
-}
-
-.sidebar {
-  position: sticky;
-  top: 16px;
-  align-self: start;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.48);
-  padding: 12px;
-  box-shadow: var(--shadow);
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-}
-
-.sideTitle, .kicker {
-  color: var(--muted);
-  font-family: "JetBrains Mono", monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.075em;
-  font-size: 0.68rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.sidebar nav { display: grid; gap: 6px; }
-.sidebar button {
-  display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-  border: 1px solid transparent;
-  border-radius: 13px;
-  background: transparent;
-  color: var(--muted);
-  padding: 8px;
-  text-align: left;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.91rem;
-  line-height: 1.26;
-}
-.sidebar button.navActive, .sidebar button:hover {
-  background: rgba(0, 92, 175, 0.08);
-  color: var(--ai);
-  border-color: rgba(0, 92, 175, 0.14);
-}
-
-.sideSummary {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-}
-.sideSummary ol {
-  margin: 0;
-  padding-left: 20px;
-  color: var(--muted);
-  font-size: 0.86rem;
-  line-height: 1.5;
-}
-.sideSummary li { margin: 4px 0; }
-
-main { display: grid; gap: 18px; min-width: 0; }
-.sectionBlock {
-  border: 1px solid var(--line);
-  border-radius: 26px;
-  background: rgba(252, 250, 242, 0.78);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  scroll-margin-top: 18px;
-  min-width: 0;
-}
-
-.sectionHead {
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-.sectionIcon {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  background: var(--ai);
-  color: white;
-  display: grid;
-  place-items: center;
-}
-.sectionHead h2 {
-  font-size: clamp(1.38rem, 2.8vw, 2.08rem);
-  letter-spacing: -0.028em;
-  line-height: 1.1;
-  margin-bottom: 0;
-}
-
-.card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel {
-  border: 1px solid var(--line);
-  background: var(--card);
-  border-radius: 20px;
-  padding: 15px;
-  min-width: 0;
-}
-
-.card h3, .articleCard h3, .decisionCard h3, .timelineItem h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3 {
-  font-size: 1.06rem;
-  line-height: 1.22;
-  margin-bottom: 7px;
-}
-.card h4, .articleCard h4 { font-size: 0.98rem; }
-.muted { color: var(--muted); }
-.logicBanner { margin-top: 14px; }
-
-.sourceCard {
-  display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-  gap: 14px;
-  margin-bottom: 14px;
-}
-.sourceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.sourceItem {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px;
-  background: rgba(252, 250, 242, 0.66);
-  display: grid;
-  gap: 5px;
-  font-size: 0.9rem;
-}
-.sourceItem span, .slideRange, .articleIndex, .sourceTag, .cascadeNum, .npdFlow span, .dfmSteps span, .checklistPanel button span, .focusList span, .formulaBoard span {
-  font-family: "JetBrains Mono", monospace;
-  font-weight: 800;
-}
-.sourceItem span { color: var(--enji); font-size: 0.66rem; text-transform: uppercase; }
-
-.timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.timelineItem { min-height: 150px; }
-.slideRange { color: var(--ruri); font-size: 0.72rem; margin-bottom: 8px; }
-
-.articleGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.articleCard { display: grid; gap: 11px; align-content: start; }
-.articleTop { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
-.articleIndex {
-  width: 36px; height: 36px; border-radius: 12px;
-  background: var(--plum); color: white; display: grid; place-items: center;
-}
-.metricWrap { row-gap: 7px; }
-.metricPill { font-size: 0.68rem; padding: 5px 8px; }
-.cautionBox {
-  border-left: 3px solid var(--enji);
-  background: rgba(159, 53, 58, 0.055);
-  border-radius: 12px;
-  padding: 10px 11px;
-}
-.cautionBox p { margin-bottom: 0; color: var(--muted); }
-.visualModel.wide { margin-top: 12px; }
-
-.chain, .formulaBoard { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 12px 0; }
-.chain div, .formulaBoard div {
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 11px;
-  background: rgba(0, 92, 175, 0.055);
-  min-height: 78px;
-  font-size: 0.93rem;
-}
-.chain span, .formulaBoard span {
-  display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
-  background: var(--ruri); color: white; margin-bottom: 7px; font-size: 0.74rem;
-}
-
-.twoCol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
-.cleanList { margin: 0; padding-left: 18px; }
-.cleanList li { margin: 6px 0; }
-.definitionCard { background: rgba(123, 141, 66, 0.075); }
-
-.decisionGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
-.decisionCard {
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.48);
-  border-radius: 18px;
-  padding: 13px;
-}
-.decisionCard > span {
-  width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center;
-  background: var(--koke); color: white; font-family: "JetBrains Mono", monospace;
-  font-weight: 800; margin-bottom: 10px; font-size: 0.78rem;
-}
-.question { color: var(--ai); font-weight: 800; }
-
-.miniTable { display: grid; gap: 7px; }
-.miniRow { display: grid; grid-template-columns: 0.72fr 0.9fr 1.45fr; gap: 8px; align-items: stretch; }
-.miniRow > div {
-  border: 1px solid var(--line); border-radius: 12px; padding: 9px;
-  background: rgba(252, 250, 242, 0.72); font-size: 0.93rem;
-}
-.miniKey { font-weight: 800; color: var(--ai); }
-.miniNote { color: var(--muted); }
-
-.flowBoard { margin-top: 12px; }
-.flowNodes {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
-  gap: 7px; align-items: center; margin: 12px 0;
-}
-.flowNode {
-  min-height: 68px;
-  border: 1px solid rgba(0, 92, 175, 0.22);
-  background: rgba(0, 92, 175, 0.055);
-  border-radius: 15px;
-  padding: 10px;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  font-weight: 800;
-  font-size: 0.92rem;
-}
-.flowArrow, .processArrow { color: var(--enji); font-size: 26px; font-weight: 800; text-align: center; line-height: 1; }
-
-.processModel {
-  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
-  align-items: center; gap: 8px; margin-top: 12px;
-}
-.processBox {
-  border: 1px solid var(--line); border-radius: 20px; min-height: 104px; padding: 14px;
-  background: rgba(255, 255, 255, 0.48);
-  display: grid; align-content: center; text-align: center; font-weight: 900;
-}
-.processBox small {
-  display: block; color: var(--muted); font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem; margin-top: 7px; line-height: 1.35;
-}
-.processBox.highlight { background: rgba(159, 53, 58, 0.075); }
-
-.strategyCascade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
-.cascadeCard {
-  border: 1px solid var(--line); border-radius: 20px; padding: 15px;
-  background: rgba(255, 255, 255, 0.5); position: relative; overflow: hidden;
-}
-.cascadeNum {
-  width: 32px; height: 32px; border-radius: 12px; display: grid; place-items: center;
-  background: var(--ai); color: white; margin-bottom: 10px; font-size: 0.78rem;
-}
-.questionBox { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 10px; color: var(--enji); font-weight: 800; }
-
-.swotGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.swotBox { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.66); }
-.swotBox span { font-size: 0.68rem; color: var(--muted); font-family: "JetBrains Mono", monospace; }
-.swotBox h4 { margin: 6px 0; color: var(--ai); font-size: 1.02rem; }
-.opsLine { color: var(--enji); font-weight: 800; }
-
-.coreBoard {
-  min-height: 382px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.42);
-  margin: 12px 0;
-  position: relative;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-.coreBoard::before { content: ""; position: absolute; width: 48%; height: 48%; border: 1px dashed rgba(0, 92, 175, 0.34); transform: rotate(45deg); }
-.coreCenter {
-  z-index: 2; width: 134px; height: 134px; border-radius: 50%; background: var(--plum); color: white;
-  display: grid; place-items: center; text-align: center; font-family: "JetBrains Mono", monospace; font-weight: 800; line-height: 1.22; font-size: 0.9rem;
-}
-.corePoint {
-  position: absolute; width: min(255px, 30%); border: 1px solid var(--line); border-radius: 17px; padding: 12px;
-  background: rgba(252, 250, 242, 0.91); z-index: 3;
-}
-.corePoint h3 { margin-bottom: 5px; }
-.corePoint p { margin-bottom: 0; color: var(--muted); font-size: 0.9rem; }
-.point1 { top: 18px; left: 50%; transform: translateX(-50%); }
-.point2 { left: 18px; bottom: 26px; }
-.point3 { right: 18px; bottom: 26px; }
-
-.riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
-.riskItem, .toolCard, .frameworkCard, .participationGrid article, .assignmentCard {
-  border: 1px solid var(--line); border-radius: 17px; padding: 12px; background: rgba(255, 255, 255, 0.46);
-}
-.riskItem h4, .toolCard h3, .frameworkCard h3, .participationGrid h3 { color: var(--ai); margin-bottom: 6px; }
-.riskItem p, .toolCard p, .frameworkCard p, .participationGrid p { margin-bottom: 0; color: var(--muted); }
-
-.compareTable { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
-.compareTable div { padding: 9px; border-bottom: 1px solid var(--line); background: rgba(252, 250, 242, 0.64); font-size: 0.94rem; }
-.compareTable div:nth-last-child(1), .compareTable div:nth-last-child(2) { border-bottom: none; }
-.compareHead { background: rgba(0, 92, 175, 0.09) !important; font-weight: 900; color: var(--ai); }
-
-.npdFlow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
-.npdFlow article { border: 1px solid rgba(123, 141, 66, 0.26); border-radius: 20px; padding: 14px; background: rgba(123, 141, 66, 0.075); }
-.npdFlow span { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--koke); color: white; margin-bottom: 10px; font-size: 0.78rem; }
-
-.dfmBoard { margin: 12px 0; }
-.dfmSteps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.dfmSteps article { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.68); }
-.dfmSteps span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--enji); color: white; margin-bottom: 8px; font-size: 0.74rem; }
-
-.platformGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.platformGrid div { border: 1px solid var(--line); border-radius: 15px; padding: 12px; background: rgba(252, 250, 242, 0.68); }
-
-.focusList { display: grid; gap: 7px; }
-.focusList div {
-  display: grid; grid-template-columns: 30px 1fr; gap: 8px; align-items: start;
-  border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: rgba(252, 250, 242, 0.68);
-}
-.focusList span { width: 24px; height: 24px; border-radius: 8px; background: var(--ai); color: white; display: grid; place-items: center; font-size: 0.73rem; }
-
-.scheduleCard { overflow-x: auto; }
-.scheduleTable {
-  display: grid;
-  grid-template-columns: 52px 78px minmax(320px, 1fr) 150px;
-  min-width: 720px;
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  overflow: hidden;
-  font-size: 0.9rem;
-}
-.scheduleTable div { padding: 8px 9px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(252, 250, 242, 0.68); }
-.scheduleTable div:nth-child(4n) { border-right: none; }
-.scheduleHead { background: rgba(0, 92, 175, 0.09) !important; color: var(--ai); font-weight: 900; }
-.dueCell { color: var(--enji); font-weight: 900; }
-
-.checklistPanel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-.checklistPanel button {
-  border: 1px solid var(--line); border-radius: 16px; padding: 11px; background: rgba(255, 255, 255, 0.5); color: var(--ink);
-  text-align: left; cursor: pointer; display: grid; grid-template-columns: 30px 1fr; gap: 9px; align-items: start; font-weight: 750; font-size: 0.95rem; line-height: 1.38;
-}
-.checklistPanel button span { width: 25px; height: 25px; border-radius: 9px; display: grid; place-items: center; background: rgba(104, 113, 118, 0.12); color: var(--muted); font-size: 0.74rem; }
-.checklistPanel button.checked { border-color: rgba(123, 141, 66, 0.45); background: rgba(123, 141, 66, 0.11); }
-.checklistPanel button.checked span { background: var(--koke); color: white; }
-.closePanel { margin-top: 12px; background: rgba(0, 92, 175, 0.055); }
-
-.floatingMode {
-  position: fixed;
-  right: 16px;
-  bottom: 14px;
-  width: 154px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 4px;
-  background: rgba(252, 250, 242, 0.92);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 24px rgba(31, 37, 40, 0.12);
-  z-index: 20;
-}
-.floatingMode button {
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 6px 5px;
-  cursor: pointer;
-  font-weight: 800;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
-  line-height: 1;
-}
-.floatingMode button.active { background: var(--ai); color: white; border-color: var(--ai); }
-
-.biEn, .biZh { display: block; }
-.biZh { font-family: "Noto Serif TC", "Source Serif 4", serif; color: var(--muted); margin-top: 3px; }
-
-@media (max-width: 1080px) {
-  .class2Root { padding: 16px; }
-  .layout, .sourceCard { grid-template-columns: 1fr; }
-  .sidebar { position: sticky; top: 8px; z-index: 8; max-height: none; overflow-x: auto; }
-  .sidebar nav { display: flex; min-width: max-content; }
-  .sidebar button { width: 178px; }
-  .sideSummary { display: none; }
-  .timeline, .decisionGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .strategyCascade, .npdFlow, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .flowNodes { grid-template-columns: 1fr; }
-  .flowArrow { transform: rotate(90deg); }
-}
-
-@media (max-width: 760px) {
-  .class2Root { padding: 10px; font-size: 15px; }
-  .hero, .sectionBlock { padding: 14px; border-radius: 20px; }
-  .heroMeta { gap: 6px; }
-  .badge { max-width: 100%; }
-  h1 { font-size: clamp(1.82rem, 10.5vw, 2.72rem); line-height: 1.04; letter-spacing: -0.035em; }
-  .heroTitle .biZh { font-size: clamp(1.14rem, 6vw, 1.56rem); }
-  .heroSub { font-size: 0.95rem; margin-bottom: 14px; }
-  .heroCallout, .logicBanner { grid-template-columns: 28px 1fr; gap: 9px; padding: 11px; border-radius: 15px; }
-  .sectionHead { grid-template-columns: 36px 1fr; gap: 10px; }
-  .sectionIcon { width: 36px; height: 36px; border-radius: 12px; }
-  .sectionHead h2 { font-size: 1.32rem; }
-  .sidebar { border-radius: 16px; padding: 9px; }
-  .sidebar button { width: 154px; font-size: 0.84rem; padding: 7px; }
-  .timeline, .articleGrid, .twoCol, .decisionGrid, .strategyCascade, .swotGrid, .npdFlow, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .checklistPanel, .platformGrid, .dfmSteps, .sourceGrid, .chain, .formulaBoard { grid-template-columns: 1fr; }
-  .miniRow { grid-template-columns: 1fr; }
-  .processModel { grid-template-columns: 1fr; }
-  .processArrow { transform: rotate(90deg); }
-  .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel { padding: 12px; border-radius: 16px; }
-  .coreBoard { min-height: auto; padding: 12px; display: grid; gap: 10px; }
-  .coreBoard::before { display: none; }
-  .coreCenter { width: auto; height: auto; border-radius: 16px; padding: 14px; }
-  .corePoint { position: static; width: auto; transform: none; }
-  .floatingMode { right: 10px; bottom: 10px; width: 136px; }
-  .floatingMode button { font-size: 0.62rem; padding: 6px 3px; }
-}
-
-@media (max-width: 430px) {
-  .class2Root { padding: 8px; }
-  .hero, .sectionBlock { padding: 12px; }
-  .badge { font-size: 0.65rem; padding: 5px 8px; }
-  .metricPill { white-space: normal; }
-  .floatingMode { width: 126px; }
-}
-
-@media print {
-  .floatingMode, .sidebar { display: none; }
-  .class2Root { padding: 0; background: white; }
-  .layout, .heroGrid { grid-template-columns: 1fr; }
-  .sectionBlock, .hero { box-shadow: none; break-inside: avoid; }
-}
-
-
-/* v3 visual debugging pass: density, contrast, overflow control, and collapsed language control */
-.class2Root, .class2Root * { min-width: 0; }
-.class2Root p, .class2Root li, .class2Root h1, .class2Root h2, .class2Root h3, .class2Root h4, .class2Root span, .class2Root button, .class2Root div { overflow-wrap: anywhere; word-break: normal; }
-.class2Root { font-size: 15.5px; line-height: 1.55; padding-bottom: 92px; }
-.class2Root p { font-size: 0.95rem; line-height: 1.55; }
-.class2Root li { line-height: 1.5; }
-
-.hero { padding: 22px; background: rgba(252, 250, 242, 0.94); }
-h1 { font-size: clamp(2rem, 4.5vw, 3.72rem); line-height: 1.02; max-width: 960px; }
-.heroSub { font-size: clamp(0.95rem, 1.45vw, 1.08rem); max-width: 75ch; color: #4F585C; }
-.heroTitle .biZh { font-size: clamp(1.18rem, 2.75vw, 1.92rem); line-height: 1.2; }
-
-.badge, .metricPill, .sourceTag { background: rgba(252, 250, 242, 0.96); color: var(--ai); }
-.badge.ghost { color: #4F585C; }
-.sectionBlock { padding: 18px; overflow: visible; background: rgba(252, 250, 242, 0.9); }
-.sectionHead { grid-template-columns: 38px minmax(0,1fr); margin-bottom: 14px; }
-.sectionIcon { width: 38px; height: 38px; border-radius: 12px; }
-.sectionHead h2 { font-size: clamp(1.24rem, 2.15vw, 1.72rem); line-height: 1.18; letter-spacing: -0.018em; }
-.kicker, .sideTitle { font-size: 0.64rem; letter-spacing: 0.065em; }
-
-.card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel,
-.decisionCard, .riskItem, .toolCard, .frameworkCard, .participationGrid article, .cascadeCard, .swotBox, .dfmSteps article, .platformGrid div, .sourceItem, .focusList div, .chain div, .formulaBoard div, .miniRow > div, .processBox, .npdFlow article {
-  background: rgba(252, 250, 242, 0.96);
-  color: var(--ink);
-  overflow: visible;
-}
-.card h3, .articleCard h3, .decisionCard h3, .timelineItem h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3, .toolCard h3, .frameworkCard h3, .participationGrid h3 {
-  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
-  line-height: 1.25;
-  margin-bottom: 0.45rem;
-}
-.card h4, .articleCard h4, .dfmSteps h4, .swotBox h4 { font-size: 0.95rem; line-height: 1.3; }
-.muted, .miniNote, .riskItem p, .toolCard p, .frameworkCard p, .participationGrid p, .cautionBox p, .corePoint p, .sideSummary ol { color: #4F585C; }
-.biZh { color: #4F585C; font-size: 0.96em; line-height: 1.45; margin-top: 0.22rem; }
-
-.articleGrid, .twoCol, .strategyCascade, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .npdFlow, .dfmSteps, .checklistPanel, .platformGrid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
-  gap: 10px;
-}
-.decisionGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); }
-.timeline { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
-.sourceGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
-.chain, .formulaBoard { grid-template-columns: repeat(auto-fit, minmax(min(100%, 185px), 1fr)); }
-
-.toolGrid, .dfmBoard, .focusList, .participationGrid, .checklistPanel { align-items: stretch; }
-.toolCard, .frameworkCard, .assignmentCard, .participationGrid article, .dfmSteps article { padding: 13px; }
-.dfmBoard > h3 { max-width: 68ch; }
-.dfmSteps article p, .participationGrid article p, .assignmentCard li, .focusList div { font-size: 0.93rem; line-height: 1.48; }
-.focusList { gap: 8px; }
-.focusList div { grid-template-columns: 28px minmax(0, 1fr); padding: 10px; align-items: start; }
-.focusList span { width: 24px; height: 24px; flex: 0 0 auto; color: #fff; }
-
-.checklistPanel button {
-  background: rgba(252, 250, 242, 0.96);
-  color: var(--ink);
-  min-height: auto;
-  padding: 10px;
-  grid-template-columns: 28px minmax(0, 1fr);
-  font-size: 0.92rem;
-  line-height: 1.42;
-}
-.checklistPanel button span { width: 24px; height: 24px; color: #4F585C; }
-.checklistPanel button.checked span { color: #fff; }
-.closePanel { padding: 14px; }
-
-.coreBoard { overflow: visible; padding: 14px; min-height: 360px; }
-.corePoint { width: min(260px, 32%); color: var(--ink); }
-.coreCenter { color: #fff; }
-.coreCenter .biZh { color: rgba(255,255,255,.9); }
-
-.scheduleCard { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.scheduleTable { font-size: 0.86rem; }
-.scheduleTable div { background: rgba(252,250,242,.96); color: var(--ink); line-height: 1.35; }
-.scheduleHead { color: var(--ai) !important; }
-.dueCell { color: var(--enji) !important; }
-
-.sidebar { background: rgba(252,250,242,.96); }
-.sidebar button { font-size: 0.86rem; line-height: 1.25; }
-.sideSummary { font-size: 0.84rem; }
-
-.floatingMode { display: none !important; }
-.modeDock {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 40;
-  display: grid;
-  justify-items: end;
-  gap: 6px;
-  font-family: "JetBrains Mono", monospace;
-}
-.modeToggle {
-  border: 1px solid rgba(37,43,46,.18);
-  background: rgba(252,250,242,.96);
-  color: var(--ink);
-  border-radius: 999px;
-  padding: 7px 10px;
-  min-width: 92px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-  align-items: center;
-  box-shadow: 0 10px 24px rgba(31,37,40,.12);
-  cursor: pointer;
-}
-.modeToggle span { font-size: 0.58rem; color: #5B6469; text-transform: uppercase; letter-spacing: .05em; }
-.modeToggle strong { font-size: 0.72rem; color: var(--ai); white-space: nowrap; }
-.modeMenu {
-  display: none;
-  min-width: 132px;
-  border: 1px solid rgba(37,43,46,.18);
-  border-radius: 16px;
-  padding: 6px;
-  background: rgba(252,250,242,.98);
-  box-shadow: 0 12px 28px rgba(31,37,40,.14);
-}
-.modeDock.open .modeMenu { display: grid; gap: 4px; }
-.modeMenu button {
-  border: 1px solid transparent;
-  background: transparent;
-  color: #4F585C;
-  border-radius: 11px;
-  padding: 7px 9px;
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.74rem;
-  line-height: 1.2;
-  font-weight: 800;
-}
-.modeMenu button:hover, .modeMenu button.active { background: rgba(0,92,175,.09); color: var(--ai); border-color: rgba(0,92,175,.12); }
-
-@media (max-width: 1080px) {
-  .sidebar { position: sticky; top: 8px; z-index: 8; overflow-x: auto; padding: 8px; }
-  .sidebar nav { display: flex; gap: 6px; }
-  .sidebar button { min-width: 148px; width: auto; padding: 7px 8px; }
-}
-
-@media (max-width: 760px) {
-  .class2Root { padding: 10px; padding-bottom: 86px; font-size: 14.8px; }
-  .hero, .sectionBlock { padding: 12px; border-radius: 18px; }
-  h1 { font-size: clamp(1.72rem, 8.8vw, 2.38rem); line-height: 1.08; letter-spacing: -0.026em; }
-  .heroTitle .biZh { font-size: clamp(1.02rem, 5.3vw, 1.36rem); }
-  .sectionHead { grid-template-columns: 34px minmax(0,1fr); gap: 9px; }
-  .sectionIcon { width: 34px; height: 34px; }
-  .sectionHead h2 { font-size: 1.18rem; line-height: 1.22; }
-  .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel, .toolCard, .frameworkCard, .participationGrid article { padding: 11px; border-radius: 14px; }
-  .formulaBoard div, .chain div { min-height: auto; }
-  .coreBoard { display: grid; gap: 9px; min-height: auto; overflow: visible; }
-  .coreBoard::before { display: none; }
-  .coreCenter { width: auto; height: auto; border-radius: 14px; padding: 12px; }
-  .corePoint { position: static; width: auto; transform: none; }
-  .modeDock { right: 10px; bottom: 10px; }
-  .modeToggle { min-width: 78px; padding: 7px 9px; }
-  .modeToggle span { display: none; }
-  .modeMenu { min-width: 116px; }
-}
-
-@media print {
-  .modeDock { display: none !important; }
-}
-
-
-/* v4 hard visual reset: fix missing contrast, card overflow, narrow grids, and collapsed language control */
 .class2Root {
   --paper: #FCFAF2;
   --ink: #202528;
   --muted: #4F585C;
   --line: rgba(32, 37, 40, 0.16);
-  --card: #FCFAF2;
-  --cardSolid: #FCFAF2;
+  --softLine: rgba(32, 37, 40, 0.09);
+  --card: rgba(252, 250, 242, 0.94);
+  --wash: #F4EFE5;
+  --wash2: #F8F4EA;
   --ruri: #005CAF;
   --ai: #165E83;
   --enji: #9F353A;
   --koke: #7B8D42;
-  --kokiake: #86473F;
   --plum: #622954;
-  background: #FCFAF2 !important;
-  color: #202528 !important;
-  font-size: 15.5px !important;
-  line-height: 1.56 !important;
-  padding-bottom: 96px !important;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(0, 92, 175, 0.055), transparent 26rem),
+    radial-gradient(circle at 86% 4%, rgba(159, 53, 58, 0.045), transparent 28rem),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Source Serif 4", "Noto Serif TC", Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.56;
+  padding: 20px 18px 96px;
+  overflow-x: hidden;
 }
 
-.class2Root * {
-  box-sizing: border-box !important;
-  min-width: 0 !important;
-  word-break: normal !important;
-  overflow-wrap: break-word !important;
-  hyphens: none !important;
+.class2Root * { box-sizing: border-box; min-width: 0; }
+.class2Root button { font-family: inherit; }
+.class2Root h1, .class2Root h2, .class2Root h3, .class2Root h4, .class2Root p { margin-top: 0; }
+.class2Root p { margin-bottom: 0.72rem; font-size: 0.96rem; line-height: 1.58; max-width: 78ch; }
+.class2Root h1, .class2Root h2, .class2Root h3, .class2Root h4 { color: var(--ink); letter-spacing: -0.012em; }
+.class2Root svg { fill: currentColor; }
+.class2Root .icon { display: block; color: currentColor; flex: 0 0 auto; }
+
+.langText { color: inherit; font: inherit; letter-spacing: inherit; line-height: inherit; overflow-wrap: normal; word-break: normal; }
+.langText .biEn, .langText .biZh { display: block; font: inherit; line-height: 1.45; overflow-wrap: normal; word-break: normal; }
+.langText .biZh { margin-top: 0.18rem; color: var(--muted); font-family: "Noto Serif TC", "Source Serif 4", Georgia, serif; }
+.heroTitle .biZh { color: var(--plum); }
+
+.hero, .sectionBlock, .sidebar {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--line);
+  background: rgba(252, 250, 242, 0.88);
+  box-shadow: 0 16px 36px rgba(31, 37, 40, 0.055);
 }
 
-.class2Root p,
-.class2Root li,
-.class2Root button,
-.class2Root div,
-.class2Root span {
-  line-height: 1.48 !important;
+.hero { border-radius: 26px; padding: 24px; margin-bottom: 18px; }
+.heroMeta, .metricWrap, .flowLegend { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.badge, .metricPill, .sourceTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(22, 94, 131, 0.2);
+  background: var(--wash2);
+  color: var(--ai);
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  font-weight: 800;
+  white-space: normal;
 }
+.badge.ghost { color: var(--muted); border-color: var(--line); }
+.heroGrid { margin-top: 18px; }
+.heroTitle { max-width: 980px; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.04; letter-spacing: -0.028em; margin-bottom: 13px; }
+.heroSub { max-width: 76ch; color: var(--muted); font-size: clamp(0.98rem, 1.5vw, 1.1rem); margin-bottom: 16px; }
+.heroCallout, .logicBanner {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid rgba(159, 53, 58, 0.22);
+  background: rgba(159, 53, 58, 0.045);
+  border-radius: 18px;
+  padding: 12px 14px;
+}
+.heroCallout p, .logicBanner p { margin: 0; }
 
-.class2Root p { font-size: 0.95rem !important; max-width: 76ch; }
-.class2Root li { font-size: 0.94rem !important; }
-.class2Root h1,
-.class2Root h2,
-.class2Root h3,
-.class2Root h4 {
-  color: #202528 !important;
-  overflow: visible !important;
+.layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 218px minmax(0, 1fr); gap: 18px; align-items: start; }
+.sidebar { position: sticky; top: 14px; border-radius: 22px; padding: 12px; max-height: calc(100vh - 28px); overflow: auto; }
+.sideTitle, .kicker {
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.66rem;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
-
-.hero,
-.sectionBlock,
-.sidebar,
-.card,
-.articleCard,
-.timelineItem,
-.assignmentCard,
-.scheduleCard,
-.visualModel,
-.flowBoard,
-.dfmBoard,
-.closePanel,
-.decisionCard,
-.riskItem,
-.toolCard,
-.frameworkCard,
-.participationGrid article,
-.cascadeCard,
-.swotBox,
-.dfmSteps article,
-.platformGrid div,
-.sourceItem,
-.focusList div,
-.chain div,
-.formulaBoard div,
-.miniRow > div,
-.processBox,
-.npdFlow article,
-.compareTable div,
-.checklistPanel button {
-  background: #FCFAF2 !important;
-  color: #202528 !important;
-  border-color: rgba(32, 37, 40, 0.16) !important;
-  overflow: visible !important;
-  max-width: 100% !important;
-}
-
-.hero { padding: 22px !important; }
-.sectionBlock { padding: 18px !important; }
-.card,
-.articleCard,
-.timelineItem,
-.assignmentCard,
-.scheduleCard,
-.visualModel,
-.flowBoard,
-.dfmBoard,
-.closePanel,
-.decisionCard,
-.riskItem,
-.toolCard,
-.frameworkCard,
-.participationGrid article,
-.cascadeCard,
-.swotBox,
-.dfmSteps article,
-.platformGrid div,
-.sourceItem,
-.chain div,
-.formulaBoard div,
-.processBox,
-.npdFlow article {
-  padding: 13px !important;
-  border-radius: 16px !important;
-}
-
-/* Remove the failure mode where white text remains after its colored background fails to load. */
-.sectionIcon,
-.articleIndex,
-.chain span,
-.formulaBoard span,
-.decisionCard > span,
-.cascadeNum,
-.npdFlow span,
-.dfmSteps span,
-.focusList span,
-.checklistPanel button span,
-.checklistPanel button.checked span,
-.coreCenter {
-  background: #F1EDE2 !important;
-  color: #165E83 !important;
-  border: 1px solid rgba(22, 94, 131, 0.24) !important;
-}
-.sectionIcon .icon { color: #165E83 !important; fill: currentColor !important; }
-.coreCenter .biZh { color: #165E83 !important; }
-.modeToggle,
-.modeMenu,
-.modeMenu button,
-.modeMenu button.active,
-.modeMenu button:hover {
-  background: #FCFAF2 !important;
-  color: #202528 !important;
-  border-color: rgba(32, 37, 40, 0.18) !important;
-}
-.modeToggle strong { color: #165E83 !important; }
-.modeMenu button.active { background: #F1EDE2 !important; color: #165E83 !important; }
-
-.muted,
-.biZh,
-.miniNote,
-.riskItem p,
-.toolCard p,
-.frameworkCard p,
-.participationGrid p,
-.cautionBox p,
-.corePoint p,
-.sideSummary ol,
-.processBox small,
-.heroSub,
-.badge.ghost {
-  color: #4F585C !important;
-}
-
-.badge,
-.metricPill,
-.sourceTag {
-  background: #F7F2E8 !important;
-  color: #165E83 !important;
-  border-color: rgba(22, 94, 131, 0.18) !important;
-  white-space: normal !important;
-}
-
-h1 {
-  font-size: clamp(1.95rem, 4.2vw, 3.42rem) !important;
-  line-height: 1.05 !important;
-  letter-spacing: -0.026em !important;
-  max-width: 980px !important;
-}
-.heroTitle .biZh {
-  font-size: clamp(1.08rem, 2.55vw, 1.72rem) !important;
-  line-height: 1.26 !important;
-  max-width: 900px !important;
-}
-.sectionHead {
-  grid-template-columns: 36px minmax(0, 1fr) !important;
-  gap: 10px !important;
-  align-items: start !important;
-}
-.sectionIcon { width: 36px !important; height: 36px !important; border-radius: 12px !important; }
-.sectionHead h2 {
-  font-size: clamp(1.18rem, 2vw, 1.62rem) !important;
-  line-height: 1.22 !important;
-  letter-spacing: -0.014em !important;
-}
-.card h3,
-.articleCard h3,
-.decisionCard h3,
-.timelineItem h3,
-.assignmentCard h3,
-.scheduleCard h3,
-.visualModel h3,
-.flowBoard h3,
-.dfmBoard h3,
-.closePanel h3,
-.toolCard h3,
-.frameworkCard h3,
-.participationGrid h3 {
-  font-size: 1rem !important;
-  line-height: 1.28 !important;
-}
-.card h4,
-.articleCard h4,
-.dfmSteps h4,
-.swotBox h4 {
-  font-size: 0.95rem !important;
-  line-height: 1.34 !important;
-}
-
-/* Force the known problem areas into readable rows instead of narrow cards. */
-#design .npdFlow,
-#design .toolGrid,
-#design .dfmSteps,
-#assignments .frameworkGrid,
-#assignments .assignmentGrid,
-#assignments .focusList,
-#participation .formulaBoard,
-#participation .participationGrid,
-#participation .twoCol,
-#checklist .checklistPanel {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 10px !important;
-  align-items: stretch !important;
-}
-
-#design .npdFlow article,
-#design .toolGrid .toolCard,
-#design .dfmSteps article,
-#assignments .frameworkCard,
-#assignments .assignmentCard,
-#assignments .focusList div,
-#participation .formulaBoard div,
-#participation .participationGrid article,
-#participation .twoCol .card,
-#checklist .checklistPanel button {
-  width: 100% !important;
-  min-height: unset !important;
-}
-
-#design .dfmSteps article,
-#assignments .focusList div,
-#participation .formulaBoard div,
-#checklist .checklistPanel button {
-  display: grid !important;
-  grid-template-columns: 34px minmax(0, 1fr) !important;
-  gap: 10px !important;
-  align-items: start !important;
-}
-
-#design .dfmSteps article h4,
-#design .dfmSteps article p,
-#assignments .focusList div .biEn,
-#assignments .focusList div .biZh,
-#participation .formulaBoard div .biEn,
-#participation .formulaBoard div .biZh,
-#checklist .checklistPanel button .biEn,
-#checklist .checklistPanel button .biZh {
-  max-width: 100% !important;
-}
-
-#design .dfmSteps article p,
-#participation .participationGrid article p,
-#assignments .assignmentCard li,
-#assignments .focusList div,
-#checklist .checklistPanel button {
-  font-size: 0.93rem !important;
-  line-height: 1.5 !important;
-}
-
-#design .dfmSteps span,
-#assignments .focusList span,
-#participation .formulaBoard span,
-#checklist .checklistPanel button span {
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 10px !important;
-  display: grid !important;
-  place-items: center !important;
-  font-size: 0.75rem !important;
-  line-height: 1 !important;
-}
-
-/* Keep general overview grids useful on desktop, but never narrow enough to crush bilingual text. */
-.articleGrid,
-.twoCol,
-.strategyCascade,
-.riskGrid,
-.swotGrid,
-.platformGrid,
-.timeline,
-.decisionGrid,
-.sourceGrid,
-.chain {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)) !important;
-  gap: 11px !important;
-}
-.decisionGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)) !important; }
-.sourceGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important; }
-
-.flowNodes,
-.processModel {
-  grid-template-columns: 1fr !important;
-  gap: 8px !important;
-}
-.flowArrow,
-.processArrow { transform: rotate(90deg) !important; font-size: 20px !important; }
-
-.compareTable {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  overflow: visible !important;
-}
-.compareTable div { min-height: unset !important; }
-.scheduleCard { overflow-x: auto !important; }
-.scheduleTable {
-  min-width: 760px !important;
-  font-size: 0.84rem !important;
-}
-.scheduleTable div {
-  padding: 7px 8px !important;
-  overflow: visible !important;
-}
-
-.sidebar {
-  background: #FCFAF2 !important;
-  overflow: auto !important;
-}
+.sidebar nav { display: grid; gap: 6px; }
 .sidebar button {
-  color: #4F585C !important;
-  font-size: 0.84rem !important;
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 13px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.86rem;
+  line-height: 1.25;
+  font-weight: 750;
 }
-.sidebar button.navActive,
-.sidebar button:hover {
-  background: #F1EDE2 !important;
-  color: #165E83 !important;
-}
+.sidebar button.navActive, .sidebar button:hover { background: var(--wash); color: var(--ai); border-color: rgba(22, 94, 131, 0.14); }
+.sideSummary { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.sideSummary ol { margin: 0; padding-left: 20px; color: var(--muted); font-size: 0.84rem; line-height: 1.45; }
+.sideSummary li { margin: 4px 0; }
 
-.modeDock {
-  right: 14px !important;
-  bottom: 14px !important;
-  z-index: 60 !important;
+main { display: grid; gap: 18px; min-width: 0; }
+.sectionBlock { border-radius: 26px; padding: 18px; scroll-margin-top: 18px; }
+.sectionHead { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 11px; align-items: start; margin-bottom: 15px; }
+.sectionIcon, .articleIndex, .decisionCard > span, .cascadeNum, .npdFlow article > span:first-child, .dfmSteps article > span:first-child, .focusList div > span:first-child, .formulaBoard div > span:first-child, .checklistPanel button > span:first-child, .chain div > span:first-child {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 10px;
+  border: 1px solid rgba(22, 94, 131, 0.22);
+  background: var(--wash);
+  color: var(--ai);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1;
 }
-.modeToggle {
-  min-width: 72px !important;
-  padding: 7px 9px !important;
-  border-radius: 999px !important;
-  display: inline-flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 0 !important;
+.sectionIcon { width: 38px; height: 38px; border-radius: 13px; }
+.sectionHead h2 { margin: 0; font-size: clamp(1.22rem, 2.15vw, 1.72rem); line-height: 1.18; }
+
+.card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel, .decisionCard, .riskItem, .toolCard, .frameworkCard, .participationGrid article, .cascadeCard, .swotBox, .dfmSteps article, .platformGrid div, .sourceItem, .chain div, .formulaBoard div, .miniRow > div, .processBox, .npdFlow article {
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: rgba(252, 250, 242, 0.92);
+  color: var(--ink);
+  padding: 13px;
+  overflow: visible;
 }
-.modeToggle span { display: none !important; }
-.modeToggle strong { font-size: 0.72rem !important; line-height: 1 !important; }
-.modeMenu {
-  min-width: 118px !important;
-  border-radius: 14px !important;
-}
-.modeMenu button {
-  font-size: 0.74rem !important;
-  padding: 7px 9px !important;
-  line-height: 1.2 !important;
-}
+.card h3, .articleCard h3, .decisionCard h3, .timelineItem h3, .assignmentCard h3, .scheduleCard h3, .visualModel h3, .flowBoard h3, .dfmBoard h3, .closePanel h3, .toolCard h3, .frameworkCard h3, .participationGrid h3 { font-size: 1.02rem; line-height: 1.28; margin-bottom: 0.45rem; }
+.card h4, .articleCard h4, .dfmSteps h4, .swotBox h4 { font-size: 0.96rem; line-height: 1.34; margin-bottom: 0.35rem; }
+.muted, .miniNote, .riskItem p, .toolCard p, .frameworkCard p, .participationGrid p, .cautionBox p, .corePoint p { color: var(--muted); }
+
+.sourceCard { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); gap: 14px; margin-bottom: 14px; }
+.sourceGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 8px; }
+.sourceItem { display: grid; gap: 4px; font-size: 0.9rem; }
+.sourceItem > span:first-child { color: var(--enji); font-family: "JetBrains Mono", monospace; font-size: 0.65rem; line-height: 1.2; text-transform: uppercase; font-weight: 800; }
+
+.timeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.timelineItem { min-height: 132px; }
+.slideRange { display: block; color: var(--ai); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; line-height: 1.25; font-weight: 800; margin-bottom: 8px; }
+.logicBanner { margin-top: 14px; }
+
+.articleGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 12px; }
+.articleCard { display: grid; gap: 10px; align-content: start; }
+.articleTop { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.articleIndex { width: 34px; height: 34px; min-width: 34px; }
+.metricWrap { row-gap: 7px; }
+.metricPill { font-size: 0.66rem; padding: 5px 8px; }
+.cautionBox { border-left: 3px solid var(--enji); background: rgba(159, 53, 58, 0.045); border-radius: 12px; padding: 10px 11px; }
+.cautionBox strong { display: block; margin-bottom: 4px; color: var(--enji); }
+.cautionBox p { margin: 0; }
+.visualModel.wide { margin-top: 12px; }
+.chain, .formulaBoard { display: grid; grid-template-columns: 1fr; gap: 9px; margin: 12px 0; }
+.chain div, .formulaBoard div { display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: 10px; row-gap: 3px; align-items: start; min-height: 0; padding: 12px 14px; }
+.chain div > .langText, .formulaBoard div > .langText { grid-column: 2; font-weight: 750; color: var(--ai); line-height: 1.38; }
+.chain div > span:first-child, .formulaBoard div > span:first-child { grid-column: 1; grid-row: 1 / span 2; }
+
+.twoCol, .strategyCascade, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .platformGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 12px; margin-bottom: 12px; }
+.cleanList { margin: 0; padding-left: 18px; }
+.cleanList li { margin: 5px 0; line-height: 1.5; }
+.definitionCard { background: rgba(123, 141, 66, 0.055); }
+
+.decisionGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr)); gap: 10px; margin-bottom: 12px; }
+.decisionCard { display: grid; gap: 7px; align-content: start; }
+.decisionCard > span { margin-bottom: 3px; }
+.decisionCard h3 { margin-bottom: 0; }
+.question { color: var(--ai); font-weight: 850; margin-bottom: 0.35rem; }
+
+.miniTable { display: grid; gap: 7px; }
+.miniRow { display: grid; grid-template-columns: minmax(130px, 0.72fr) minmax(170px, 0.9fr) minmax(240px, 1.45fr); gap: 8px; }
+.miniRow > div { border-radius: 12px; padding: 9px; font-size: 0.92rem; }
+.miniKey { color: var(--ai); font-weight: 850; }
+
+.flowBoard { margin-top: 12px; }
+.flowNodes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; align-items: stretch; margin: 12px 0; }
+.flowNode { border: 1px solid rgba(22, 94, 131, 0.2); background: var(--wash2); border-radius: 15px; min-height: 62px; padding: 10px; display: grid; place-items: center; text-align: center; color: var(--ai); font-weight: 850; font-size: 0.88rem; line-height: 1.35; }
+.flowArrow { display: none; }
+.processModel { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: center; margin-top: 12px; }
+.processBox { min-height: 96px; display: grid; align-content: center; text-align: center; font-weight: 850; }
+.processBox small { display: block; margin-top: 7px; color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 0.66rem; line-height: 1.35; }
+.processBox.highlight { background: rgba(159, 53, 58, 0.045); }
+.processArrow { color: var(--enji); font-size: 22px; font-weight: 850; text-align: center; }
+
+.strategyCascade { align-items: stretch; }
+.cascadeCard { display: grid; align-content: start; gap: 6px; }
+.cascadeNum { margin-bottom: 4px; }
+.questionBox { margin-top: 8px; padding-top: 9px; border-top: 1px solid var(--line); color: var(--enji); font-weight: 850; line-height: 1.42; }
+.swotGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 10px; margin-bottom: 12px; }
+.swotBox > span:first-child { color: var(--muted); font-family: "JetBrains Mono", monospace; font-size: 0.66rem; font-weight: 800; }
+.swotBox h4 { color: var(--ai); margin: 5px 0; }
+.opsLine { color: var(--enji); font-weight: 800; }
+.coreBoard { border: 1px solid var(--line); border-radius: 22px; background: rgba(252, 250, 242, 0.88); margin: 12px 0; padding: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: stretch; }
+.coreCenter { grid-column: 1 / -1; justify-self: center; width: min(100%, 240px); border: 1px solid rgba(22, 94, 131, 0.22); border-radius: 999px; background: var(--wash); color: var(--ai); padding: 13px 16px; text-align: center; font-family: "JetBrains Mono", monospace; font-weight: 850; line-height: 1.25; }
+.corePoint { border: 1px solid var(--line); border-radius: 16px; padding: 12px; background: var(--card); }
+.corePoint h3 { margin-bottom: 5px; }
+.corePoint p { margin: 0; font-size: 0.92rem; }
+.riskGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.riskItem h4, .toolCard h3, .frameworkCard h3, .participationGrid h3 { color: var(--ai); }
+.compareTable { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
+.compareTable div { padding: 9px; border-bottom: 1px solid var(--line); background: var(--card); font-size: 0.92rem; }
+.compareTable div:nth-child(2n-1) { border-right: 1px solid var(--line); }
+.compareHead { background: var(--wash) !important; color: var(--ai); font-weight: 850; }
+
+.npdFlow, .dfmSteps, .focusList, .checklistPanel { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 12px 0; }
+.npdFlow article, .dfmSteps article, .focusList div, .checklistPanel button { display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: 12px; row-gap: 3px; align-items: start; }
+.npdFlow article > span:first-child, .dfmSteps article > span:first-child, .focusList div > span:first-child, .checklistPanel button > span:first-child { grid-column: 1; grid-row: 1 / span 2; }
+.npdFlow article > h3, .npdFlow article > p, .dfmSteps article > h4, .dfmSteps article > p, .focusList div > .langText, .checklistPanel button > .langText { grid-column: 2; width: 100%; margin: 0; }
+.npdFlow article h3, .dfmSteps article h4, .focusList div > .langText, .checklistPanel button > .langText { font-size: 0.98rem; line-height: 1.36; font-weight: 750; color: var(--ink); }
+.npdFlow article p, .dfmSteps article p { color: var(--muted); font-size: 0.93rem; line-height: 1.48; }
+.toolGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.platformGrid { margin-top: 10px; }
+.platformGrid div p { margin: 0; }
+.dfmBoard { margin: 12px 0; }
+
+.frameworkGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.assignmentGrid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); }
+.assignmentCard ul { margin: 0; padding-left: 18px; }
+.assignmentCard li { margin: 6px 0; line-height: 1.5; }
+.scheduleCard { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.scheduleTable { display: grid; grid-template-columns: 52px 78px minmax(320px, 1fr) 160px; min-width: 760px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; font-size: 0.85rem; }
+.scheduleTable div { padding: 7px 8px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--card); line-height: 1.35; }
+.scheduleTable div:nth-child(4n) { border-right: none; }
+.scheduleHead { background: var(--wash) !important; color: var(--ai); font-weight: 850; }
+.dueCell { color: var(--enji); font-weight: 850; }
+
+.participationGrid { grid-template-columns: 1fr; }
+.participationGrid article p { margin: 0; }
+.formulaBoard { grid-template-columns: 1fr; }
+.checklistPanel button { cursor: pointer; text-align: left; font: inherit; }
+.checklistPanel button.checked { background: rgba(123, 141, 66, 0.08); border-color: rgba(123, 141, 66, 0.34); }
+.closePanel { margin-top: 12px; background: rgba(0, 92, 175, 0.04); }
+
+.modeDock { position: fixed; right: 14px; bottom: 14px; z-index: 60; display: grid; justify-items: end; gap: 6px; font-family: "JetBrains Mono", monospace; }
+.modeToggle { border: 1px solid var(--line); background: rgba(252, 250, 242, 0.96); color: var(--ink); border-radius: 999px; min-width: 62px; padding: 7px 10px; display: inline-flex; justify-content: center; align-items: center; box-shadow: 0 10px 24px rgba(31,37,40,.12); cursor: pointer; }
+.modeToggle span { display: none; }
+.modeToggle strong { color: var(--ai); font-size: 0.72rem; line-height: 1; white-space: nowrap; }
+.modeMenu { display: none; min-width: 120px; border: 1px solid var(--line); border-radius: 14px; padding: 6px; background: rgba(252, 250, 242, 0.98); box-shadow: 0 12px 28px rgba(31,37,40,.14); }
+.modeDock.open .modeMenu { display: grid; gap: 4px; }
+.modeMenu button { border: 1px solid transparent; background: transparent; color: var(--muted); border-radius: 10px; padding: 8px 10px; text-align: left; cursor: pointer; font-size: 0.74rem; line-height: 1.2; font-weight: 850; }
+.modeMenu button:hover, .modeMenu button.active { background: var(--wash); color: var(--ai); border-color: rgba(22,94,131,.14); }
 
 @media (max-width: 1080px) {
-  .layout { grid-template-columns: 1fr !important; gap: 12px !important; }
-  .sidebar { position: sticky !important; top: 6px !important; padding: 8px !important; }
-  .sidebar nav { display: flex !important; gap: 6px !important; overflow-x: auto !important; padding-bottom: 2px !important; }
-  .sidebar button { min-width: 138px !important; width: auto !important; }
+  .class2Root { padding: 14px 12px 92px; }
+  .layout, .sourceCard { grid-template-columns: 1fr; gap: 12px; }
+  .sidebar { position: sticky; top: 6px; z-index: 12; max-height: none; overflow: hidden; padding: 9px; }
+  .sidebar nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .sidebar button { min-width: 138px; width: auto; }
+  .sideSummary { display: none; }
+  .coreBoard { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 760px) {
-  .class2Root { padding: 9px !important; padding-bottom: 88px !important; font-size: 14.6px !important; }
-  .hero, .sectionBlock { padding: 12px !important; border-radius: 18px !important; }
-  h1 { font-size: clamp(1.62rem, 8.2vw, 2.18rem) !important; line-height: 1.1 !important; }
-  .heroSub { font-size: 0.93rem !important; line-height: 1.5 !important; }
-  .heroTitle .biZh { font-size: clamp(1rem, 5vw, 1.26rem) !important; }
-  .sectionHead { grid-template-columns: 32px minmax(0,1fr) !important; }
-  .sectionIcon { width: 32px !important; height: 32px !important; }
-  .sectionHead h2 { font-size: 1.12rem !important; }
-  .card,
-  .articleCard,
-  .timelineItem,
-  .assignmentCard,
-  .scheduleCard,
-  .visualModel,
-  .flowBoard,
-  .dfmBoard,
-  .closePanel,
-  .decisionCard,
-  .riskItem,
-  .toolCard,
-  .frameworkCard,
-  .participationGrid article,
-  .cascadeCard,
-  .swotBox,
-  .dfmSteps article,
-  .platformGrid div,
-  .sourceItem,
-  .chain div,
-  .formulaBoard div,
-  .processBox,
-  .npdFlow article,
-  .checklistPanel button {
-    padding: 10px !important;
-    border-radius: 14px !important;
-  }
-  .articleGrid,
-  .twoCol,
-  .strategyCascade,
-  .riskGrid,
-  .swotGrid,
-  .platformGrid,
-  .timeline,
-  .decisionGrid,
-  .sourceGrid,
-  .chain {
-    grid-template-columns: 1fr !important;
-  }
-  .compareTable { grid-template-columns: 1fr !important; }
-  .modeDock { right: 9px !important; bottom: 9px !important; }
-  .modeToggle { min-width: 60px !important; padding: 7px 8px !important; }
+  .class2Root { padding: 9px 8px 88px; font-size: 14.7px; }
+  .hero, .sectionBlock { padding: 12px; border-radius: 18px; }
+  .heroTitle { font-size: clamp(1.62rem, 8.3vw, 2.18rem); line-height: 1.1; }
+  .heroSub { font-size: 0.93rem; }
+  .heroCallout, .logicBanner { grid-template-columns: 28px minmax(0, 1fr); padding: 11px; border-radius: 15px; }
+  .sectionHead { grid-template-columns: 32px minmax(0, 1fr); gap: 9px; }
+  .sectionIcon { width: 32px; height: 32px; }
+  .sectionHead h2 { font-size: 1.16rem; line-height: 1.22; }
+  .card, .articleCard, .timelineItem, .assignmentCard, .scheduleCard, .visualModel, .flowBoard, .dfmBoard, .closePanel, .decisionCard, .riskItem, .toolCard, .frameworkCard, .participationGrid article, .cascadeCard, .swotBox, .platformGrid div, .sourceItem, .chain div, .formulaBoard div, .miniRow > div, .processBox, .npdFlow article, .dfmSteps article, .focusList div, .checklistPanel button { padding: 10px 11px; border-radius: 14px; }
+  .articleGrid, .twoCol, .strategyCascade, .riskGrid, .toolGrid, .frameworkGrid, .participationGrid, .assignmentGrid, .platformGrid, .swotGrid, .timeline, .decisionGrid, .sourceGrid { grid-template-columns: 1fr; }
+  .miniRow, .flowNodes, .processModel, .compareTable { grid-template-columns: 1fr; }
+  .processArrow { transform: rotate(90deg); }
+  .npdFlow article, .dfmSteps article, .focusList div, .formulaBoard div, .checklistPanel button { grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; }
+  .modeDock { right: 9px; bottom: 9px; }
+  .modeToggle { min-width: 58px; padding: 7px 8px; }
 }
 
 @media (max-width: 430px) {
-  .class2Root { padding: 7px !important; padding-bottom: 86px !important; }
-  .hero, .sectionBlock { padding: 10px !important; }
-  .badge, .metricPill, .sourceTag { font-size: 0.64rem !important; padding: 5px 7px !important; }
-  #design .dfmSteps article,
-  #assignments .focusList div,
-  #participation .formulaBoard div,
-  #checklist .checklistPanel button {
-    grid-template-columns: 30px minmax(0, 1fr) !important;
-    gap: 8px !important;
-  }
+  .class2Root { padding: 7px 6px 86px; }
+  .hero, .sectionBlock { padding: 10px; }
+  .badge, .metricPill, .sourceTag { font-size: 0.63rem; padding: 5px 7px; }
 }
 
+@media print {
+  .modeDock, .sidebar { display: none !important; }
+  .class2Root { background: #fff; padding: 0; }
+  .layout { grid-template-columns: 1fr; }
+  .hero, .sectionBlock { box-shadow: none; break-inside: avoid; }
+}
 `;
